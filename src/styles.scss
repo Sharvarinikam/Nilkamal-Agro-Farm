@@ -1,0 +1,250 @@
+// ═══════════════════════════════════════════════════════════════
+// Nilkamal agro farms — ROYAL HERITAGE MANGO BRAND
+// Global Styles & Design Tokens
+// ═══════════════════════════════════════════════════════════════
+
+// ── Color Palette: Royal Indian Farm ──
+$mango-gold:      #F5A623;
+$mango-deep:      #E8910C;
+$mango-ripe:      #FF8C00;
+$saffron:         #D4742C;
+$saffron-deep:    #B85C1E;
+$terracotta:      #C1694F;
+$terracotta-dark: #8B4532;
+$leaf-green:      #4A7C59;
+$leaf-deep:       #2D5A3F;
+$leaf-light:      #6B9E7A;
+$cream:           #FDF5E6;
+$cream-warm:      #FAF0DC;
+$beige:           #F0E4CE;
+$beige-dark:      #D9C9A8;
+$ivory:           #FFFDF7;
+$bark-brown:      #5C3D2E;
+$bark-deep:       #3B2314;
+$royal-maroon:    #6B1D2A;
+$royal-wine:      #8B2240;
+$gold-accent:     #C49B32;
+$gold-light:      #E8C868;
+$gold-pale:       #F5E6B8;
+
+// ── Typography ──
+$font-display:  'Playfair Display', Georgia, serif;
+$font-heading:  'Cormorant Garamond', Georgia, serif;
+$font-body:     'Jost', 'Segoe UI', sans-serif;
+
+// ── Spacing ──
+$section-padding: clamp(80px, 10vh, 140px);
+$content-max:     1280px;
+$content-narrow:  960px;
+
+// ── Transitions ──
+$ease-royal: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+// ── Mixins ──
+@mixin royal-gradient {
+  background: linear-gradient(135deg, $cream 0%, $beige 40%, $gold-pale 100%);
+}
+
+@mixin gold-text {
+  background: linear-gradient(135deg, $gold-accent, $mango-gold, $gold-light);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@mixin section-base {
+  padding: $section-padding clamp(20px, 5vw, 80px);
+  position: relative;
+  overflow: hidden;
+}
+
+@mixin ornament-border {
+  border-image: linear-gradient(90deg, transparent, $gold-accent, $mango-gold, $gold-accent, transparent) 1;
+  border-width: 1px 0;
+  border-style: solid;
+}
+
+@mixin respond($bp) {
+  @if $bp == 'sm'   { @media (max-width: 576px)  { @content; } }
+  @if $bp == 'md'   { @media (max-width: 768px)  { @content; } }
+  @if $bp == 'lg'   { @media (max-width: 1024px) { @content; } }
+  @if $bp == 'xl'   { @media (max-width: 1280px) { @content; } }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GLOBAL RESETS & BASE
+// ═══════════════════════════════════════════════════════════════
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto; // GSAP handles scrolling
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: $font-body;
+  font-weight: 400;
+  color: $bark-deep;
+  background: $ivory;
+  line-height: 1.7;
+  overflow-x: hidden;
+
+  &.loading {
+    overflow: hidden;
+    height: 100vh;
+  }
+}
+
+img { max-width: 100%; display: block; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+// ── Typography Globals ──
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-display;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.subheading {
+  font-family: $font-heading;
+  font-weight: 400;
+  font-style: italic;
+  color: $saffron;
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.section-title {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  color: $bark-deep;
+  margin-bottom: 0.3em;
+
+  &--gold {
+    @include gold-text;
+  }
+}
+
+.section-subtitle {
+  font-family: $font-heading;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  color: $terracotta;
+  font-weight: 300;
+  font-style: italic;
+  max-width: 600px;
+}
+
+// ── Ornamental Divider ──
+.ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 24px 0;
+
+  &::before, &::after {
+    content: '';
+    height: 1px;
+    width: 60px;
+    background: linear-gradient(90deg, transparent, $gold-accent);
+  }
+  &::after {
+    background: linear-gradient(90deg, $gold-accent, transparent);
+  }
+  &__diamond {
+    width: 8px;
+    height: 8px;
+    background: $gold-accent;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+}
+
+// ── Buttons ──
+.btn-royal {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 40px;
+  font-family: $font-body;
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $ivory;
+  background: linear-gradient(135deg, $saffron-deep, $terracotta-dark);
+  border: 1px solid rgba($gold-accent, 0.3);
+  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s $ease-royal;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, $royal-maroon, $bark-deep);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba($bark-deep, 0.3);
+    &::before { opacity: 1; }
+  }
+
+  span { position: relative; z-index: 1; }
+}
+
+.btn-outline {
+  @extend .btn-royal;
+  background: transparent;
+  color: $bark-deep;
+  border: 2px solid $gold-accent;
+
+  &::before {
+    background: linear-gradient(135deg, $gold-accent, $mango-gold);
+  }
+  &:hover { color: $ivory; }
+}
+
+// ── Noise Overlay ──
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px;
+}
+
+// ── Custom Scrollbar ──
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: $cream;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, $gold-accent, $saffron);
+  border-radius: 4px;
+}
+
+// ── Selection ──
+::selection {
+  background: rgba($mango-gold, 0.3);
+  color: $bark-deep;
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["app.component.ts"],
+  "sourcesContent": ["\n    :host { display: block; }\n\n    .site-wrapper {\n      opacity: 0;\n      transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);\n\n      &.visible {\n        opacity: 1;\n      }\n    }\n\n    .main-content {\n      position: relative;\n    }\n  "],
+  "mappings": ";AACI;AAAQ,WAAA;;AAER,CAAA;AACE,WAAA;AACA,cAAA,QAAA,KAAA,aAAA,IAAA,EAAA,IAAA,EAAA,IAAA,EAAA;;AAEA,CAJF,YAIE,CAAA;AACE,WAAA;;AAIJ,CAAA;AACE,YAAA;;",
+  "names": []
+}

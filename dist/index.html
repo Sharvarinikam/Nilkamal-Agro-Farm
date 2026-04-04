@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nilkamal Agro Farms — Royal Heritage Mangoes</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥭</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --mango-gold:#F5A623;--gold:#C49B32;--gold-light:#FFD700;--gold-pale:#F5E6B8;
+  --saffron:#D4742C;--terracotta:#C1694F;--bark:#3B2314;--bark-deep:#1A0F05;
+  --cream:#FDF5E6;--ivory:#FFFDF7;--beige:#F0E4CE;--leaf:#4A7C59;
+  --wine:#6B1D2A;--font-display:'Playfair Display',Georgia,serif;
+  --font-heading:'Cormorant Garamond',Georgia,serif;--font-body:'Jost','Segoe UI',sans-serif;
+}
+html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:auto}
+body{font-family:var(--font-body);color:var(--bark);background:var(--ivory);line-height:1.7;overflow-x:hidden}
+body.loading{overflow:hidden;height:100vh}
+img{max-width:100%;display:block}a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);font-weight:700;line-height:1.15}
+::selection{background:rgba(245,166,35,0.3);color:var(--bark)}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--cream)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--gold),var(--saffron));border-radius:4px}
+
+/* Grain */
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat;background-size:256px}
+
+/* ═══ LOADER ═══ */
+#loader{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;transition:opacity .6s}
+#loader .bg{position:absolute;inset:0;background:linear-gradient(160deg,#1A0F05,#2D1810 50%,#1A0F05)}
+#loader .bg::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(196,155,50,.08),transparent 60%)}
+#loader .content{position:relative;display:flex;flex-direction:column;align-items:center;gap:32px}
+#loader .mango-wrap{position:relative;width:180px;height:180px}
+#loader svg{width:100%;height:100%;position:relative;z-index:2;filter:drop-shadow(0 4px 20px rgba(245,166,35,.3))}
+#loader .glow{position:absolute;top:50%;left:50%;width:120px;height:120px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(245,166,35,.25),transparent 70%);z-index:1}
+#loader .brand{opacity:0;text-align:center;line-height:1}
+.brand-nikam{font-family:var(--font-display);font-size:clamp(2.5rem,6vw,4rem);font-weight:800;background:linear-gradient(135deg,#C49B32,#FFD700,#E8C868,#C49B32);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.08em;display:block}
+.brand-farms{font-family:var(--font-heading);font-size:clamp(1.2rem,3vw,1.8rem);font-weight:300;color:#D4A854;letter-spacing:.35em;text-transform:uppercase;display:block;margin-top:4px}
+#loader .tagline{font-family:var(--font-heading);font-size:clamp(.85rem,1.8vw,1.1rem);font-style:italic;color:rgba(212,168,84,.6);letter-spacing:.1em;opacity:0;margin-top:12px}
+.progress-track{width:200px;height:2px;background:rgba(196,155,50,.15);border-radius:1px;overflow:hidden}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#C49B32,#FFD700);border-radius:1px}
+
+/* ═══ SITE WRAPPER ═══ */
+#site{opacity:0;transition:opacity .8s cubic-bezier(.25,.46,.45,.94)}
+#site.visible{opacity:1}
+
+/* ═══ NAVBAR ═══ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 0;transition:all .4s}
+.nav.scrolled{padding:10px 0;background:rgba(26,15,5,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(196,155,50,.15)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,60px);display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px;z-index:1001}
+.nav-logo-icon{font-size:1.8rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+.nav-logo-name{font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:#FFD700;letter-spacing:.04em;display:block;line-height:1}
+.nav-logo-sub{font-family:var(--font-heading);font-size:.7rem;color:rgba(212,168,84,.7);letter-spacing:.35em;text-transform:uppercase;display:block}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
+.nav-link{font-family:var(--font-body);font-size:.85rem;font-weight:400;color:rgba(253,245,230,.75);letter-spacing:.1em;text-transform:uppercase;transition:color .3s;position:relative}
+.nav-link::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s}
+.nav-link:hover{color:#FFD700}.nav-link:hover::after{width:100%}
+.nav-cta{font-family:var(--font-body);font-size:.8rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:#1A0F05;background:linear-gradient(135deg,#C49B32,#FFD700);padding:10px 28px;transition:all .3s}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 15px rgba(196,155,50,.4)}
+.nav-toggle{display:none;flex-direction:column;gap:5px;padding:8px;z-index:1001}
+.nav-toggle span{width:24px;height:2px;background:#D4A854;transition:all .3s;border-radius:1px;display:block}
+@media(max-width:768px){
+  .nav-toggle{display:flex}
+  .nav-links{position:fixed;inset:0;background:rgba(26,15,5,.97);flex-direction:column;justify-content:center;gap:28px;transform:translateX(100%);transition:transform .4s}
+  .nav-links.open{transform:translateX(0)}
+  .nav-link{font-size:1.1rem;letter-spacing:.15em}
+  .nav-toggle.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+  .nav-toggle.open span:nth-child(2){opacity:0}
+  .nav-toggle.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+}
+
+/* ═══ SHARED ═══ */
+.subheading{font-family:var(--font-heading);font-weight:400;font-style:italic;color:var(--saffron);font-size:clamp(1rem,1.4vw,1.25rem);letter-spacing:.08em;text-transform:uppercase}
+.section-title{font-size:clamp(2.2rem,5vw,4rem);color:var(--bark);margin-bottom:.3em}
+.gold-text{background:linear-gradient(135deg,var(--gold),var(--mango-gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-subtitle{font-family:var(--font-heading);font-size:clamp(1.1rem,2vw,1.5rem);color:var(--terracotta);font-weight:300;font-style:italic;max-width:600px}
+.ornament{display:flex;align-items:center;justify-content:center;gap:16px;margin:24px 0}
+.ornament::before,.ornament::after{content:'';height:1px;width:60px;background:linear-gradient(90deg,transparent,var(--gold))}
+.ornament::after{background:linear-gradient(90deg,var(--gold),transparent)}
+.ornament .diamond{width:8px;height:8px;background:var(--gold);transform:rotate(45deg);flex-shrink:0}
+.btn-royal{display:inline-flex;align-items:center;gap:10px;padding:16px 40px;font-family:var(--font-body);font-weight:500;font-size:.95rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ivory);background:linear-gradient(135deg,#B85C1E,#8B4532);border:1px solid rgba(196,155,50,.3);position:relative;overflow:hidden;transition:all .4s}
+.btn-royal::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--wine),var(--bark));opacity:0;transition:opacity .4s}
+.btn-royal:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(59,35,20,.3)}.btn-royal:hover::before{opacity:1}
+.btn-royal span{position:relative;z-index:1}
+.btn-outline{display:inline-flex;align-items:center;gap:10px;padding:16px 40px;font-family:var(--font-body);font-weight:500;font-size:.95rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bark);border:2px solid var(--gold);position:relative;overflow:hidden;transition:all .4s;background:transparent}
+.btn-outline::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--gold),var(--mango-gold));opacity:0;transition:opacity .4s}
+.btn-outline:hover{color:var(--ivory)}.btn-outline:hover::before{opacity:1}
+.btn-outline span{position:relative;z-index:1}
+
+/* ═══ HERO ═══ */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;padding:clamp(100px,12vh,140px) clamp(20px,5vw,80px) clamp(60px,8vh,100px)}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-gradient{position:absolute;inset:0;background:linear-gradient(160deg,#0F0A05,#1A0F05 20%,#2D1810 50%,#1A1205 80%,#0F0A05)}
+.hero-pattern{position:absolute;inset:0;opacity:.03;background-image:radial-gradient(circle at 25% 25%,#C49B32 1px,transparent 1px),radial-gradient(circle at 75% 75%,#C49B32 1px,transparent 1px);background-size:60px 60px}
+#heroCanvas{position:absolute;right:-5%;top:10%;width:55%;height:80%;z-index:1;opacity:.85}
+@media(max-width:1024px){#heroCanvas{right:-10%;width:60%;opacity:.4}}
+@media(max-width:768px){#heroCanvas{right:-15%;top:15%;width:70%;opacity:.3}}
+.hero-content{position:relative;z-index:2;max-width:680px}
+.hero-badge{display:inline-flex;align-items:center;gap:12px;font-family:var(--font-body);font-size:.75rem;font-weight:400;color:rgba(196,155,50,.7);letter-spacing:.25em;text-transform:uppercase;margin-bottom:28px;opacity:0}
+.hero-badge .d{font-size:.5rem;color:var(--gold)}
+.hero-title{margin-bottom:28px;opacity:0}
+.hero-title span{display:block;font-family:var(--font-display);font-size:clamp(3rem,7vw,5.5rem);font-weight:800;color:var(--cream);line-height:1.05;letter-spacing:-.02em}
+.hero-title .gold{background:linear-gradient(135deg,#C49B32,#FFD700 30%,#E8C868 60%,#C49B32);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic}
+.hero-sub{font-family:var(--font-heading);font-size:clamp(1.1rem,2vw,1.45rem);font-weight:300;color:rgba(253,245,230,.6);line-height:1.8;margin-bottom:40px;max-width:520px;opacity:0}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap;opacity:0}
+.hero-actions .btn-outline{border-color:rgba(196,155,50,.4);color:#D4A854}
+.hero-actions .btn-outline:hover{color:#1A0F05}
+.hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;opacity:0;z-index:2}
+.hero-scroll span{font-family:var(--font-body);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,155,50,.4)}
+.scroll-line{width:1px;height:50px;background:linear-gradient(180deg,var(--gold),transparent);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:.4;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.2)}}
+.hero-corner{position:absolute;width:60px;height:60px;border-color:rgba(196,155,50,.2);border-style:solid;z-index:3}
+.corner-tl{top:30px;left:30px;border-width:1px 0 0 1px}.corner-tr{top:30px;right:30px;border-width:1px 1px 0 0}
+.corner-bl{bottom:30px;left:30px;border-width:0 0 1px 1px}.corner-br{bottom:30px;right:30px;border-width:0 1px 1px 0}
+@media(max-width:768px){.hero-corner{display:none}}
+
+/* ═══ ABOUT ═══ */
+.about{position:relative;padding:clamp(80px,10vh,140px) clamp(20px,5vw,80px);background:linear-gradient(180deg,var(--ivory),var(--cream),#FAF0DC)}
+.about-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1.2fr;gap:clamp(40px,6vw,100px);align-items:center}
+@media(max-width:1024px){.about-grid{grid-template-columns:1fr}}
+.about-image{position:relative;aspect-ratio:4/5;background:linear-gradient(135deg,var(--beige),#D9C9A8);overflow:hidden}
+.about-image-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#8B7D4A;font-family:var(--font-heading);font-style:italic;font-size:1.1rem}
+.about-image-inner .icon{font-size:4rem}
+.about-image-border{position:absolute;inset:12px;border:1px solid rgba(196,155,50,.3);pointer-events:none}
+.about-stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:24px;border:1px solid rgba(196,155,50,.2)}
+.about-stat{display:flex;flex-direction:column;align-items:center;padding:20px 12px;border-right:1px solid rgba(196,155,50,.2)}
+.about-stat:last-child{border-right:none}
+.about-stat-num{font-family:var(--font-display);font-size:clamp(1.8rem,3vw,2.5rem);font-weight:700;background:linear-gradient(135deg,var(--gold),#8B6914);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.about-stat-label{font-family:var(--font-body);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:#8B7D4A;text-align:center;margin-top:4px}
+.about-text p{font-size:clamp(.95rem,1.2vw,1.08rem);color:#5C4A3E;line-height:1.9;margin-bottom:18px}
+.about-text p:first-child::first-letter{font-family:var(--font-display);font-size:3.5em;float:left;line-height:.8;margin:4px 12px 0 0;color:var(--gold);font-weight:700}
+.about-values{display:flex;flex-direction:column;gap:18px;margin-top:32px}
+.about-value{display:flex;gap:16px;align-items:flex-start}
+.about-value strong{display:block;font-family:var(--font-display);font-size:1rem;color:var(--bark);margin-bottom:2px}
+.about-value p{font-size:.9rem;color:#7A6A5E;line-height:1.6;margin:0}
+.about-value-icon{font-size:1.5rem;flex-shrink:0;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:rgba(196,155,50,.1);border:1px solid rgba(196,155,50,.2)}
+
+/* ═══ JOURNEY ═══ */
+.journey{position:relative;padding:clamp(80px,10vh,140px) clamp(20px,5vw,80px);background:linear-gradient(180deg,#1A0F05,#2D1810 30%,#251510 70%,#1A0F05);color:var(--cream)}
+.journey-header{text-align:center;max-width:700px;margin:0 auto clamp(60px,8vh,100px)}
+.journey-header .section-title{color:var(--cream)}
+.journey-header .section-subtitle{color:rgba(253,245,230,.5);margin:0 auto}
+.journey-timeline{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:320px 1fr;gap:60px}
+@media(max-width:1024px){.journey-timeline{grid-template-columns:1fr}}
+.journey-sidebar{position:sticky;top:15vh;height:fit-content;display:flex;flex-direction:column;align-items:center;gap:20px}
+@media(max-width:1024px){.journey-sidebar{display:none}}
+#journeyCanvas{width:320px;height:320px;border:1px solid rgba(196,155,50,.15);background:rgba(0,0,0,.3)}
+.journey-stage-label{font-family:var(--font-heading);font-size:1.2rem;font-style:italic;color:var(--gold);letter-spacing:.05em;transition:all .4s}
+.journey-stages{display:flex;flex-direction:column;position:relative}
+.journey-stages::before{content:'';position:absolute;left:24px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,rgba(196,155,50,.3),transparent)}
+@media(max-width:768px){.journey-stages::before{left:18px}}
+.journey-stage{display:flex;gap:28px;padding:40px 0;opacity:.3;transition:opacity .6s}
+.journey-stage.active{opacity:1}
+.stage-marker{flex-shrink:0;width:48px;height:48px;border:2px solid;display:flex;align-items:center;justify-content:center;font-size:1.4rem;background:#1A0F05;z-index:1}
+@media(max-width:768px){.stage-marker{width:36px;height:36px;font-size:1rem}}
+.stage-content h3{font-family:var(--font-display);font-size:clamp(1.3rem,2.5vw,1.8rem);font-weight:700;color:var(--cream);margin-bottom:4px}
+.stage-content em{font-family:var(--font-heading);font-size:1rem;color:rgba(196,155,50,.7);display:block;margin-bottom:12px}
+.stage-content p{font-size:.95rem;color:rgba(253,245,230,.55);line-height:1.8;max-width:480px}
+.stage-step{font-family:var(--font-body);font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;display:block;margin-bottom:6px}
+
+/* ═══ SPECIAL ═══ */
+.special{position:relative;padding:clamp(80px,10vh,140px) clamp(20px,5vw,80px);background:linear-gradient(180deg,#FAF0DC,var(--cream),var(--ivory))}
+.special-container{max-width:1280px;margin:0 auto}
+.special-header{text-align:center;margin-bottom:clamp(50px,6vh,80px)}
+.special-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+@media(max-width:1024px){.special-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:576px){.special-grid{grid-template-columns:1fr}}
+.special-card{position:relative;padding:clamp(32px,4vw,48px);border:1px solid rgba(196,155,50,.12);transition:all .5s;overflow:hidden}
+.special-card:hover{background:rgba(196,155,50,.04);border-color:rgba(196,155,50,.3)}
+.special-card:hover .card-accent{transform:scaleX(1)}
+.card-num{font-family:var(--font-display);font-size:3.5rem;font-weight:800;color:rgba(196,155,50,.08);line-height:1;margin-bottom:12px}
+.card-icon{font-size:2rem;margin-bottom:16px}
+.card-title{font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--bark);margin-bottom:10px}
+.card-text{font-size:.9rem;color:#7A6A5E;line-height:1.75}
+.card-accent{position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--mango-gold));transform:scaleX(0);transform-origin:left;transition:transform .5s}
+.guarantee{margin-top:clamp(50px,6vh,80px)}
+.guarantee-inner{display:flex;align-items:center;gap:24px;padding:clamp(28px,4vw,48px);background:linear-gradient(135deg,#2D1810,var(--bark));border:1px solid rgba(196,155,50,.2);color:var(--cream)}
+@media(max-width:576px){.guarantee-inner{flex-direction:column;text-align:center}}
+.guarantee-inner .g-icon{font-size:3rem;flex-shrink:0}
+.guarantee-inner h4{font-family:var(--font-display);font-size:1.3rem;color:#FFD700;margin-bottom:8px}
+.guarantee-inner p{font-size:.95rem;color:rgba(253,245,230,.6);line-height:1.7}
+
+/* ═══ VARIETIES ═══ */
+.varieties{position:relative;padding:clamp(80px,10vh,140px) clamp(20px,5vw,80px);background:linear-gradient(180deg,#1A0F05,#2D1810,#1A0F05)}
+.varieties-container{max-width:1280px;margin:0 auto}
+.varieties-header{text-align:center;margin-bottom:clamp(50px,6vh,80px)}
+.varieties-header .section-title{color:var(--cream)}
+.varieties-showcase{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+@media(max-width:576px){.varieties-showcase{grid-template-columns:1fr}}
+.var-card{background:rgba(253,245,230,.03);border:1px solid rgba(196,155,50,.12);transition:all .5s;overflow:hidden}
+.var-card:hover{border-color:rgba(196,155,50,.4);background:rgba(253,245,230,.06);transform:translateY(-4px)}
+.var-card.featured{border-color:rgba(196,155,50,.3);background:rgba(196,155,50,.05)}
+.var-visual{position:relative;height:180px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(196,155,50,.05),rgba(245,166,35,.08))}
+.var-emoji{font-size:5rem;filter:drop-shadow(0 8px 20px rgba(0,0,0,.3))}
+.var-badge{position:absolute;top:16px;right:16px;font-family:var(--font-body);font-size:.65rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:#1A0F05;background:linear-gradient(135deg,#C49B32,#FFD700);padding:4px 12px}
+.var-body{padding:28px}
+.var-body h3{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--cream);margin-bottom:4px}
+.var-origin{font-family:var(--font-heading);font-size:.9rem;color:var(--gold);display:block;margin-bottom:12px}
+.var-body>p{font-size:.9rem;color:rgba(253,245,230,.5);line-height:1.7;margin-bottom:20px}
+.var-meta{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.var-meta-item{display:flex;align-items:center;gap:12px}
+.var-meta-item .label{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(253,245,230,.4);width:70px;flex-shrink:0}
+.var-bar{flex:1;height:4px;background:rgba(253,245,230,.08);border-radius:2px;overflow:hidden}
+.var-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--mango-gold));border-radius:2px;transition:width 1.2s ease-out}
+.var-price{display:flex;align-items:baseline;gap:6px;margin-bottom:20px}
+.var-from{font-size:.75rem;color:rgba(253,245,230,.4);text-transform:uppercase;letter-spacing:.1em}
+.var-amount{font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:#FFD700}
+.var-unit{font-size:.85rem;color:rgba(253,245,230,.4)}
+.var-card .btn-royal{width:100%;justify-content:center}
+
+/* ═══ FARM TO HOME ═══ */
+.f2h{position:relative;padding:clamp(80px,10vh,140px) clamp(20px,5vw,80px);background:linear-gradient(180deg,var(--ivory),var(--cream),#FAF0DC)}
+.f2h-container{max-width:960px;margin:0 auto}
+.f2h-header{text-align:center;margin-bottom:clamp(50px,6vh,80px)}
+.f2h-step{display:flex;gap:clamp(20px,4vw,40px);padding-bottom:48px}
+.f2h-visual{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.f2h-circle{width:64px;height:64px;border:2px solid rgba(196,155,50,.3);display:flex;align-items:center;justify-content:center;font-size:1.8rem;background:var(--ivory);flex-shrink:0;transition:all .3s}
+.f2h-circle:hover{border-color:var(--gold);background:rgba(196,155,50,.08);transform:scale(1.1)}
+@media(max-width:576px){.f2h-circle{width:48px;height:48px;font-size:1.3rem}}
+.f2h-connector{width:1px;flex:1;min-height:40px;background:linear-gradient(180deg,rgba(196,155,50,.3),rgba(196,155,50,.08))}
+.f2h-content{flex:1;padding-top:8px}
+.f2h-num{font-family:var(--font-display);font-size:.75rem;font-weight:700;color:var(--gold);letter-spacing:.15em;display:block;margin-bottom:6px}
+.f2h-content h3{font-family:var(--font-display);font-size:clamp(1.1rem,2vw,1.4rem);font-weight:700;color:var(--bark);margin-bottom:8px}
+.f2h-content p{font-size:.92rem;color:#7A6A5E;line-height:1.75;margin-bottom:8px}
+.f2h-time{font-family:var(--font-body);font-size:.72rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);opacity:.7}
+.f2h-cta{text-align:center;padding:clamp(32px,5vw,56px);border:1px solid rgba(196,155,50,.2);background:rgba(196,155,50,.03);margin-top:20px}
+.f2h-cta p{font-family:var(--font-heading);font-size:clamp(1.1rem,2vw,1.4rem);font-style:italic;color:#5C4A3E;margin-bottom:24px}
+
+/* ═══ TESTIMONIALS ═══ */
+.test{position:relative;padding:clamp(80px,10vh,140px) clamp(20px,5vw,80px);background:linear-gradient(180deg,#1A0F05,#2D1810,#251510)}
+.test-container{max-width:1280px;margin:0 auto}
+.test-header{text-align:center;margin-bottom:clamp(50px,6vh,80px)}
+.test-header .section-title{color:var(--cream)}
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:1024px){.test-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:576px){.test-grid{grid-template-columns:1fr}}
+.test-card{position:relative;padding:clamp(28px,3vw,40px);background:rgba(253,245,230,.02);border:1px solid rgba(196,155,50,.1);transition:all .4s}
+.test-card:hover{border-color:rgba(196,155,50,.3);background:rgba(253,245,230,.04);transform:translateY(-4px)}
+.test-quote{font-family:var(--font-display);font-size:4rem;font-weight:800;line-height:1;background:linear-gradient(135deg,#C49B32,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:-10px}
+.test-text{font-family:var(--font-heading);font-size:1.05rem;font-style:italic;color:rgba(253,245,230,.7);line-height:1.8;margin-bottom:20px}
+.test-divider{width:40px;height:1px;background:rgba(196,155,50,.3);margin-bottom:16px}
+.test-author{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.test-avatar{width:40px;height:40px;border:1px solid rgba(196,155,50,.3);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:.85rem;font-weight:700;color:var(--gold);background:rgba(196,155,50,.05);flex-shrink:0}
+.test-author strong{display:block;font-family:var(--font-display);font-size:.95rem;color:var(--cream)}
+.test-author small{font-size:.75rem;color:rgba(196,155,50,.6);letter-spacing:.08em}
+.test-stars{display:flex;gap:3px}.test-stars span{font-size:.8rem;color:var(--gold)}
+.test-proof{display:flex;justify-content:center;margin-top:clamp(50px,6vh,80px);border:1px solid rgba(196,155,50,.12)}
+.test-proof-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:clamp(20px,3vw,32px);border-right:1px solid rgba(196,155,50,.12)}
+.test-proof-item:last-child{border-right:none}
+@media(max-width:576px){.test-proof-item{padding:16px 8px}}
+.proof-num{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;background:linear-gradient(135deg,#C49B32,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.proof-label{font-family:var(--font-body);font-size:clamp(.6rem,1vw,.75rem);letter-spacing:.12em;text-transform:uppercase;color:rgba(253,245,230,.4);text-align:center;margin-top:4px}
+
+/* ═══ CONTACT ═══ */
+.contact{position:relative;padding:clamp(80px,10vh,140px) clamp(20px,5vw,80px);background:linear-gradient(180deg,#FAF0DC,var(--cream),var(--ivory))}
+.contact-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(40px,6vw,80px);align-items:start}
+@media(max-width:1024px){.contact-grid{grid-template-columns:1fr}}
+.contact-info{display:flex;flex-direction:column;gap:24px;margin-top:20px}
+.contact-info-item{display:flex;gap:16px;align-items:flex-start}
+.contact-info-item strong{display:block;font-family:var(--font-display);font-size:.95rem;color:var(--bark);margin-bottom:2px}
+.contact-info-item p{font-size:.88rem;color:#7A6A5E;line-height:1.6;margin:0}
+.ci-icon{font-size:1.3rem;flex-shrink:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(196,155,50,.08);border:1px solid rgba(196,155,50,.15)}
+.contact-form-wrap{padding:clamp(28px,4vw,48px);background:linear-gradient(135deg,#2D1810,var(--bark),#2D1810);border:1px solid rgba(196,155,50,.2)}
+.contact-form-wrap h3{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:#FFD700;margin-bottom:6px}
+.contact-form-wrap>p{font-family:var(--font-heading);font-size:.95rem;font-style:italic;color:rgba(253,245,230,.5);margin-bottom:28px}
+.c-form{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:576px){.c-form{grid-template-columns:1fr}}
+.c-field{display:flex;flex-direction:column;gap:6px}
+.c-field.full{grid-column:1/-1}
+.c-field label{font-family:var(--font-body);font-size:.72rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(253,245,230,.4)}
+.c-field input,.c-field select,.c-field textarea{background:rgba(253,245,230,.05);border:1px solid rgba(196,155,50,.15);padding:12px 16px;font-family:var(--font-body);font-size:.9rem;color:var(--cream);outline:none;transition:border-color .3s;border-radius:0}
+.c-field input::placeholder,.c-field textarea::placeholder{color:rgba(253,245,230,.2)}
+.c-field input:focus,.c-field select:focus,.c-field textarea:focus{border-color:var(--gold)}
+.c-field select{-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%23C49B32'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+.c-field select option{background:#2D1810;color:var(--cream)}
+.c-field textarea{resize:vertical;min-height:80px}
+.qty-wrap{display:flex;align-items:center;border:1px solid rgba(196,155,50,.15);width:fit-content}
+.qty-btn{width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--gold);background:rgba(196,155,50,.05);transition:background .2s}
+.qty-btn:hover{background:rgba(196,155,50,.15)}
+.qty-val{font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:#FFD700;min-width:50px;text-align:center}
+.c-submit{grid-column:1/-1;width:100%;justify-content:center;margin-top:8px}
+
+/* ═══ FOOTER ═══ */
+.footer{position:relative;background:#0F0A05}
+.footer-falling{position:relative;height:280px;overflow:hidden;background:linear-gradient(180deg,#1A0F05,#0F0A05);display:flex;align-items:flex-end;justify-content:center}
+.mango-drop{position:absolute;top:-40px;font-size:clamp(1.5rem,3vw,2.5rem);opacity:0;filter:drop-shadow(0 4px 8px rgba(0,0,0,.4))}
+.footer-basket{position:relative;z-index:2;width:clamp(100px,15vw,160px);margin-bottom:20px;filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
+.footer-main{border-top:1px solid rgba(196,155,50,.1)}
+.footer-grid{max-width:1280px;margin:0 auto;padding:clamp(40px,6vh,70px) clamp(20px,5vw,80px);display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:clamp(30px,4vw,60px)}
+@media(max-width:1024px){.footer-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:576px){.footer-grid{grid-template-columns:1fr}}
+.footer-logo{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.footer-logo-icon{font-size:2rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+.footer-logo-name{display:block;font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:#FFD700}
+.footer-logo-tag{display:block;font-family:var(--font-heading);font-size:.7rem;color:rgba(196,155,50,.5);letter-spacing:.2em;text-transform:uppercase}
+.footer-desc{font-size:.88rem;color:rgba(253,245,230,.35);line-height:1.75;max-width:320px}
+.footer-links h4{font-family:var(--font-display);font-size:.95rem;font-weight:600;color:var(--gold);margin-bottom:16px;letter-spacing:.04em}
+.footer-links a{display:block;font-size:.85rem;color:rgba(253,245,230,.35);padding:5px 0;transition:color .3s}
+.footer-links a:hover{color:#FFD700}
+.footer-bottom{border-top:1px solid rgba(196,155,50,.08)}
+.footer-bottom-inner{max-width:1280px;margin:0 auto;padding:20px clamp(20px,5vw,80px);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-bottom-inner p{font-size:.75rem;color:rgba(253,245,230,.2)}
+.footer-bottom-inner .craft{font-style:italic}
+</style>
+</head>
+<body class="loading">
+
+<!-- ═══ LOADER ═══ -->
+<div id="loader">
+  <div class="bg"></div>
+  <div class="content">
+    <div class="mango-wrap">
+      <svg id="loaderSvg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <g class="ls ls-seed"><ellipse cx="100" cy="120" rx="14" ry="22" fill="#8B6914" stroke="#5C4A10" stroke-width="1"/><ellipse cx="100" cy="120" rx="10" ry="18" fill="#A07D1A" opacity="0.5"/></g>
+        <g class="ls ls-sprout" opacity="0"><ellipse cx="100" cy="130" rx="12" ry="18" fill="#8B6914"/><path d="M100 112 Q98 95 92 80" stroke="#4A7C3A" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="89" cy="78" rx="10" ry="6" fill="#6B9E3A" transform="rotate(-25 89 78)"/></g>
+        <g class="ls ls-plant" opacity="0"><rect x="97" y="90" width="6" height="50" rx="3" fill="#5C8A3C"/><ellipse cx="82" cy="88" rx="16" ry="9" fill="#4A7C3A" transform="rotate(-20 82 88)"/><ellipse cx="118" cy="95" rx="14" ry="8" fill="#5C9E4A" transform="rotate(15 118 95)"/><ellipse cx="88" cy="75" rx="13" ry="7" fill="#6BAE5A" transform="rotate(-30 88 75)"/></g>
+        <g class="ls ls-mango" opacity="0"><defs><radialGradient id="mg" cx="40%" cy="35%"><stop offset="0%" stop-color="#FFD700"/><stop offset="45%" stop-color="#F5A623"/><stop offset="100%" stop-color="#E8910C"/></radialGradient></defs><path d="M100 55 Q135 60 145 100 Q148 135 120 155 Q100 165 80 155 Q52 135 55 100 Q60 60 100 55Z" fill="url(#mg)" stroke="#D4892A" stroke-width="1.5"/><path d="M100 55 Q103 45 108 42" stroke="#4A7C3A" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="112" cy="40" rx="12" ry="7" fill="#4A7C3A" transform="rotate(25 112 40)"/><ellipse cx="85" cy="85" rx="20" ry="12" fill="rgba(255,255,255,0.15)" transform="rotate(-20 85 85)"/></g>
+      </svg>
+      <div class="glow" id="loaderGlow"></div>
+    </div>
+    <div class="brand" id="loaderBrand"><span class="brand-nikam">Nilkamal Agro</span><span class="brand-farms">Farms</span></div>
+    <div class="tagline" id="loaderTagline">Royal Heritage Mangoes</div>
+    <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+  </div>
+</div>
+
+<!-- ═══ SITE ═══ -->
+<div id="site">
+<div class="grain"></div>
+
+<!-- NAVBAR -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo"><span class="nav-logo-icon">🥭</span><div><span class="nav-logo-name">Nilkamal</span><span class="nav-logo-sub">Agro Farms</span></div></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about" class="nav-link">Our Story</a></li>
+      <li><a href="#journey" class="nav-link">The Journey</a></li>
+      <li><a href="#varieties" class="nav-link">Varieties</a></li>
+      <li><a href="#farm-to-home" class="nav-link">Farm to Home</a></li>
+      <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+      <li><a href="#contact" class="nav-cta">Order Now</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg"><div class="hero-gradient"></div><div class="hero-pattern"></div></div>
+  <div id="heroCanvas"></div>
+  <div class="hero-content">
+    <div class="hero-badge" id="heroBadge"><span class="d">◆</span><span>Est. 2010 · Pune, Maharashtra</span><span class="d">◆</span></div>
+    <h1 class="hero-title" id="heroTitle"><span>The Royal</span><span class="gold">Heritage</span><span>of Kesars</span></h1>
+    <p class="hero-sub" id="heroSub">Three generations of passion. One extraordinary mango.<br>Handpicked from our sun-blessed orchards in Pune.</p>
+    <div class="hero-actions" id="heroActions"><a href="#varieties" class="btn-royal"><span>Explore Varieties</span></a><a href="#about" class="btn-outline"><span>Our Legacy</span></a></div>
+  </div>
+  <div class="hero-scroll" id="heroScroll"><div class="scroll-line"></div><span>Scroll to Discover</span></div>
+  <div class="hero-corner corner-tl"></div><div class="hero-corner corner-tr"></div><div class="hero-corner corner-bl"></div><div class="hero-corner corner-br"></div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-left reveal">
+      <div class="about-image"><div class="about-image-inner"><div class="icon">🌳</div><span>Our Ancestral Orchards</span></div><div class="about-image-border"></div></div>
+      <div class="about-stats">
+        <div class="about-stat"><span class="about-stat-num">15+</span><span class="about-stat-label">Years of Legacy</span></div>
+        <div class="about-stat"><span class="about-stat-num">15</span><span class="about-stat-label">Acres of Orchards</span></div>
+        <div class="about-stat"><span class="about-stat-num">10K+</span><span class="about-stat-label">Trees Nurtured</span></div>
+      </div>
+    </div>
+    <div class="about-right">
+      <span class="subheading reveal">Our Heritage</span>
+      <h2 class="section-title reveal">Three Generations<br>of Mango Royalty</h2>
+      <div class="ornament reveal"><div class="diamond"></div></div>
+      <div class="about-text reveal">
+        <p>In 2010, our father planted the first Kesar saplings on the sun-drenched slopes of Pune. He believed that the finest mangoes come not from science alone, but from a deep reverence for the land, the seasons, and the ancient wisdom passed down through generations.</p>
+        <p>Today, Nilkamal Agro Farms spans over 15 acres of heritage orchards. Every mango that leaves our farm carries the warmth of our soil, the sweetness of monsoon rains, and the love of a family that has dedicated its life to growing the king of fruits.</p>
+      </div>
+      <div class="about-values reveal">
+        <div class="about-value"><span class="about-value-icon">🌿</span><div><strong>Chemical-Free Cultivation</strong><p>No pesticides, no shortcuts—only organic methods our ancestors trusted.</p></div></div>
+        <div class="about-value"><span class="about-value-icon">🤲</span><div><strong>Hand-Picked with Care</strong><p>Every mango is touched by human hands, never machines, from tree to box.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section class="journey" id="journey">
+  <div class="journey-header">
+    <span class="subheading reveal">The Sacred Lifecycle</span>
+    <h2 class="section-title reveal" style="color:var(--cream)">From Seed to<br><em class="gold-text">Golden Perfection</em></h2>
+    <p class="section-subtitle reveal" style="color:rgba(253,245,230,.5);margin:0 auto">Witness the miraculous journey of our Kesar — a twelve-month symphony of nature</p>
+    <div class="ornament reveal"><div class="diamond"></div></div>
+  </div>
+  <div class="journey-timeline">
+    <div class="journey-sidebar">
+      <div id="journeyCanvas"></div>
+      <div class="journey-stage-label" id="journeyLabel">The Seed</div>
+    </div>
+    <div class="journey-stages" id="journeyStages"></div>
+  </div>
+</section>
+
+<!-- SPECIAL -->
+<section class="special" id="special">
+  <div class="special-container">
+    <div class="special-header">
+      <span class="subheading reveal">What Sets Us Apart</span>
+      <h2 class="section-title reveal">Why Our Mangoes<br><em class="gold-text">Reign Supreme</em></h2>
+      <div class="ornament reveal"><div class="diamond"></div></div>
+    </div>
+    <div class="special-grid" id="specialGrid"></div>
+    <div class="guarantee reveal">
+      <div class="guarantee-inner"><span class="g-icon">👑</span><div><h4>The Nilkamal Agro Farms Royal Promise</h4><p>Every box that leaves our farm carries our family's honour.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- VARIETIES -->
+<section class="varieties" id="varieties">
+  <div class="varieties-container">
+    <div class="varieties-header">
+      <span class="subheading reveal">Our Royal Collection</span>
+      <h2 class="section-title reveal" style="color:var(--cream)">The Mango<br><em class="gold-text">Crown Jewels</em></h2>
+      <p class="section-subtitle reveal" style="color:rgba(253,245,230,.5);margin:0 auto">Each variety — a jewel in the crown of Indian mangoes</p>
+      <div class="ornament reveal"><div class="diamond"></div></div>
+    </div>
+    <div class="varieties-showcase" id="varietiesGrid"></div>
+  </div>
+</section>
+
+<!-- FARM TO HOME -->
+<section class="f2h" id="farm-to-home">
+  <div class="f2h-container">
+    <div class="f2h-header">
+      <span class="subheading reveal">The Royal Passage</span>
+      <h2 class="section-title reveal">From Our Orchards<br><em class="gold-text">To Your Table</em></h2>
+      <div class="ornament reveal"><div class="diamond"></div></div>
+    </div>
+    <div id="f2hSteps"></div>
+    <div class="f2h-cta reveal"><p>From tree to your doorstep in under 1 week. That's the Nilkamal Agro Farms promise.</p><a href="#contact" class="btn-royal"><span>Order Fresh Mangoes</span></a></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="test" id="testimonials">
+  <div class="test-container">
+    <div class="test-header">
+      <span class="subheading reveal">Words of Honour</span>
+      <h2 class="section-title reveal" style="color:var(--cream)">Loved by<br><em class="gold-text">Connoisseurs</em></h2>
+      <div class="ornament reveal"><div class="diamond"></div></div>
+    </div>
+    <div class="test-grid" id="testGrid"></div>
+    <div class="test-proof reveal">
+      <div class="test-proof-item"><span class="proof-num">15,000+</span><span class="proof-label">Happy Families</span></div>
+      <div class="test-proof-item"><span class="proof-num">4.9★</span><span class="proof-label">Average Rating</span></div>
+      <div class="test-proof-item"><span class="proof-num">98%</span><span class="proof-label">Repeat Customers</span></div>
+      <div class="test-proof-item"><span class="proof-num">12</span><span class="proof-label">States Delivered</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-grid">
+    <div>
+      <span class="subheading reveal">Get In Touch</span>
+      <h2 class="section-title reveal">Order Your<br><em class="gold-text">Royal Harvest</em></h2>
+      <div class="ornament reveal"><div class="diamond"></div></div>
+      <div class="contact-info reveal">
+        <div class="contact-info-item"><span class="ci-icon">📍</span><div><strong>Farm Address</strong><p>Nilkamal Agro Farms, Nhavare Village, Taluka Shirur,<br>District Pune, Maharashtra 412211</p></div></div>
+        <div class="contact-info-item"><span class="ci-icon">📞</span><div><strong>Phone & WhatsApp</strong><p>+91 7878571934</p></div></div>
+        <div class="contact-info-item"><span class="ci-icon">✉️</span><div><strong>Email</strong><p>nikamshar6@gmail.com</p></div></div>
+        <div class="contact-info-item"><span class="ci-icon">🕐</span><div><strong>Season</strong><p>Pre-orders: March - April<br>Deliveries: April – June</p></div></div>
+      </div>
+    </div>
+    <div class="contact-form-wrap reveal">
+      <h3>Place Your Order</h3>
+      <p>Fill in your details and our team will call you within 24 hours</p>
+      <div class="c-form">
+        <div class="c-field"><label>Full Name</label><input type="text" placeholder="Your full name"></div>
+        <div class="c-field"><label>Phone Number</label><input type="tel" placeholder="+91 XXXXX XXXXX"></div>
+        <div class="c-field"><label>City</label><input type="text" placeholder="Delivery city"></div>
+        <div class="c-field"><label>Variety Preference</label><select><option value="">Select variety</option><option>Kesar (Pune)</option><option>Devgad Hapus</option><option>Mixed Royal Box</option></select></div>
+        <div class="c-field full"><label>Quantity (Dozens)</label><div class="qty-wrap"><button class="qty-btn" onclick="adjustQty(-1)">−</button><span class="qty-val" id="qtyVal">2</span><button class="qty-btn" onclick="adjustQty(1)">+</button></div></div>
+        <div class="c-field full"><label>Special Requests</label><textarea rows="3" placeholder="Gift wrapping, specific dates, etc."></textarea></div>
+        <button class="btn-royal c-submit" onclick="this.querySelector('span').textContent='✓ Request Received!'"><span>Submit Order Request</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" id="footer">
+  <div class="footer-falling" id="fallingArea">
+    <div class="mango-drop" style="left:25%" data-delay="0">🥭</div>
+    <div class="mango-drop" style="left:45%" data-delay="0.2">🥭</div>
+    <div class="mango-drop" style="left:55%" data-delay="0.4">🥭</div>
+    <div class="mango-drop" style="left:35%" data-delay="0.6">🥭</div>
+    <div class="mango-drop" style="left:65%" data-delay="0.1">🥭</div>
+    <div class="mango-drop" style="left:50%" data-delay="0.8">🥭</div>
+    <div class="mango-drop" style="left:40%" data-delay="0.5">🥭</div>
+    <div class="mango-drop" style="left:60%" data-delay="0.3">🥭</div>
+    <div class="footer-basket">
+      <svg viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#B87333"/><stop offset="100%" stop-color="#8B5E3C"/></linearGradient></defs>
+        <path d="M20 30 Q25 90 80 92 Q135 90 140 30 Z" fill="url(#bg)" stroke="#6B4226" stroke-width="2"/>
+        <path d="M30 40 Q80 55 130 40" stroke="#9E6B45" stroke-width="1" fill="none" opacity="0.5"/>
+        <path d="M25 55 Q80 70 135 55" stroke="#9E6B45" stroke-width="1" fill="none" opacity="0.5"/>
+        <path d="M28 70 Q80 82 132 70" stroke="#9E6B45" stroke-width="1" fill="none" opacity="0.5"/>
+        <ellipse cx="80" cy="30" rx="62" ry="10" fill="#C4864A" stroke="#8B5E3C" stroke-width="2"/>
+        <circle cx="60" cy="38" r="10" fill="#F5A623" opacity="0.9"/><circle cx="85" cy="35" r="11" fill="#E8910C" opacity="0.9"/>
+        <circle cx="100" cy="40" r="9" fill="#FFB347" opacity="0.9"/><circle cx="72" cy="48" r="8" fill="#F5A623" opacity="0.8"/>
+      </svg>
+    </div>
+  </div>
+  <div class="footer-main">
+    <div class="footer-grid">
+      <div><div class="footer-logo"><span class="footer-logo-icon">🥭</span><div><span class="footer-logo-name">Nilkamal Agro Farms</span><span class="footer-logo-tag">Royal Heritage Mangoes</span></div></div><p class="footer-desc">Three generations of passion. Fifteen acres of sun-blessed orchards. One extraordinary mango. From our family to yours, since 2010.</p></div>
+      <div class="footer-links"><h4>Explore</h4><a href="#about">Our Story</a><a href="#journey">The Journey</a><a href="#varieties">Varieties</a><a href="#farm-to-home">Farm to Home</a><a href="#contact">Order Now</a></div>
+      <div class="footer-links"><h4>Learn</h4><a href="#">How to Ripen Mangoes</a><a href="#">Mango Recipes</a><a href="#">Sustainability</a></div>
+      <div class="footer-links"><h4>Connect</h4><a href="#">Instagram</a><a href="#">WhatsApp</a><a href="#">YouTube</a></div>
+    </div>
+    <div class="footer-bottom"><div class="footer-bottom-inner"><p>&copy; 2026 Nilkamal Agro Farms. All rights reserved.</p><p class="craft">Crafted with ♥ and a love for organic mangoes</p></div></div>
+  </div>
+</footer>
+</div><!-- /site -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════════
+const journeyData = [
+  {icon:'🌰',title:'The Sacred Seed',sub:'December — The Quiet Beginning',desc:'Selected from the finest Kesar mother trees, each seed carries within it seventy years of heritage genetics. Planted in our ancestral soil, blessed by the winter sun.',color:'#8B6914'},
+  {icon:'🌱',title:'The First Sprout',sub:'January — Awakening',desc:'A tender green shoot breaks through rich Pune earth. Our farmers watch over each sapling like a newborn child, shielding it from wind and excess rain.',color:'#6B9E3A'},
+  {icon:'🪴',title:'The Growing Sapling',sub:'February — Strength',desc:'Roots reach deep into mineral-rich black soil. The sapling strengthens, its trunk thickening, leaves broadening to drink the coastal sun.',color:'#4A7C3A'},
+  {icon:'🌳',title:'The Majestic Tree',sub:'March — Full Crown',desc:'A magnificent canopy unfolds. Our Kesar trees stand like royalty in the orchard — their dense crowns creating cathedral-like shade below.',color:'#2D5A1E'},
+  {icon:'🌸',title:'The Golden Blossom',sub:'April — The Promise',desc:'Thousands of tiny cream-white flowers burst into bloom, filling the orchard with intoxicating fragrance. Bees dance between blossoms in ancient pollination rituals.',color:'#F5E6B8'},
+  {icon:'🟢',title:'The Raw Mango',sub:'May — Green Gold',desc:'Firm, aromatic, vibrant green. The raw Kesar hangs heavy on the branch, already carrying the promise of its legendary sweetness.',color:'#7CB342'},
+  {icon:'🥭',title:'The Ripe Kesar',sub:'June — Golden Perfection',desc:'Bathed in golden sunlight, the Kesar achieves its legendary saffron hue. The flesh turns to silk, the aroma becomes divine. The King of Fruits is crowned.',color:'#F5A623'},
+];
+
+const specialData = [
+ // {icon:'🏔️',title:'Konkan Terroir',desc:'The unique microclimate of our Ratnagiri orchards — laterite soil, coastal humidity, and Sahyadri mountain winds — creates flavour no other region can replicate.'},
+  {icon:'☀️',title:'Naturally Ripened',desc:'We never use carbide or artificial ripening. Each Kesar Mango ripens naturally on the tree and in traditional hay beds, developing its signature creamy texture.'},
+  {icon:'🧬',title:'Heritage Genetics',desc:'Our trees descend from saplings selected seventy years ago for exceptional sweetness, aroma, and that unmistakable saffron colour inside.'},
+  {icon:'🧪',title:'Lab-Tested Purity',desc:'Every batch is certified free of pesticide residue. We share lab reports with every order because transparency is our tradition.'},
+  {icon:'📦',title:'Same-Day Dispatch',desc:'Mangoes are harvested at dawn, graded by hand, wrapped in tissue, and dispatched the very same day to preserve peak freshness.'},
+  {icon:'💛',title:'Love in Every Box',desc:"We don't just pack mangoes — we include handwritten notes, recipe cards, and our family's story. Because every box is a gift from our home to yours."},
+];
+
+const varietiesData = [
+ // {name:'Alphonso Hapus',emoji:'🥭',origin:'Ratnagiri, Maharashtra',desc:'The undisputed King of Mangoes. Rich saffron flesh, zero fibre, intoxicating aroma. Our signature heritage variety.',sweet:95,aroma:98,fibre:10,price:'1,200',badge:'Crown Jewel',featured:true},
+  {name:'Kesar',emoji:'🥭',origin:'Junagadh, Gujarat',desc:'Named after saffron for its deep orange pulp. Intensely sweet with a hint of citrus and floral notes.',sweet:90,aroma:85,fibre:15,price:'800',badge:null,featured:false},
+  //{name:'Devgad Hapus',emoji:'🥭',origin:'Devgad, Maharashtra',desc:"Slightly tangier cousin of the Ratnagiri Alphonso. Firmer flesh, excellent for cutting. A connoisseur's choice.",sweet:88,aroma:92,fibre:12,price:'1,000',badge:'Limited',featured:false},
+];
+
+/* const f2hData = [
+  {icon:'🌅',title:'Dawn Harvest',desc:'Our farmers hand-pick only the finest mangoes at first light, when the fruit is coolest and freshest.',time:'5:00 AM'},
+  {icon:'🔍',title:'Royal Selection',desc:'Each mango is individually inspected, graded by size, colour, and aroma. Only the top 20% earn the Nilkamal Agro Farms seal.',time:'7:00 AM'},
+  {icon:'🧺',title:'Traditional Wrapping',desc:'Wrapped lovingly in soft tissue paper and nestled in hay-lined boxes — the way our grandmother used to pack them.',time:'9:00 AM'},
+  {icon:'🚛',title:'Cold Chain Dispatch',desc:'Temperature-controlled transport from Nhavare, Pune to major cities. We never break the cold chain.',time:'11:00 AM'},
+  {icon:'🏠',title:'Doorstep Delivery',desc:'Delivered to your home with a freshness guarantee, a handwritten note from our family, and recipe suggestions.',time:'Next Day'},
+]; */
+
+const testData = [
+  {text:"The moment I opened the box, the aroma transported me straight to my grandmother's village in Konkan. These are not just mangoes — they are memories wrapped in gold.",name:'Priya Deshmukh',init:'PD',loc:'Mumbai, Maharashtra'},
+  {text:'I have tasted Alphonso from many farms, but Nilkamal Agro Farms is in a league of its own. The texture is like custard, the sweetness perfectly balanced.',name:'Rajesh Kulkarni',init:'RK',loc:'Pune, Maharashtra'},
+  {text:"We ordered for our daughter's wedding. Every guest asked where we got these magnificent mangoes. The presentation, the freshness — absolutely impeccable.",name:'Sunita & Anil Joshi',init:'SJ',loc:'Thane, Maharashtra'},
+  {text:'As a chef, I am particular about ingredients. These Kesars have a depth of flavour — honeyed, floral, with a hint of saffron — that elevates every dessert.',name:'Chef Vikas Mehta',init:'VM',loc:'Thane, Maharashtra'},
+  {text:"Three seasons running, we order exclusively from Nilkamal Agro Farms. The consistency is remarkable. Every single mango is perfect.",name:'Deepak Nair',init:'DN',loc:'Thane, Maharashtra'},
+  {text:'I sent a box to my parents in the US. They called in tears — said it tasted exactly like the mangoes from their childhood.',name:'Anita Patil',init:'AP',loc:'Thane, Maharashtra'},
+];
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER DYNAMIC SECTIONS
+// ═══════════════════════════════════════════════════════════════
+function renderSections() {
+  // Journey stages
+  const jEl = document.getElementById('journeyStages');
+  jEl.innerHTML = journeyData.map((s,i) => `
+    <div class="journey-stage" data-index="${i}">
+      <div class="stage-marker" style="border-color:${s.color}"><span>${s.icon}</span></div>
+      <div class="stage-content">
+        <span class="stage-step" style="color:${s.color}">Stage ${i+1}</span>
+        <h3>${s.title}</h3><em>${s.sub}</em><p>${s.desc}</p>
+      </div>
+    </div>`).join('');
+
+  // Special cards
+  const sEl = document.getElementById('specialGrid');
+  sEl.innerHTML = specialData.map((s,i) => `
+    <div class="special-card">
+      <div class="card-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="card-icon">${s.icon}</div>
+      <h3 class="card-title">${s.title}</h3>
+      <p class="card-text">${s.desc}</p>
+      <div class="card-accent"></div>
+    </div>`).join('');
+
+  // Varieties
+  const vEl = document.getElementById('varietiesGrid');
+  vEl.innerHTML = varietiesData.map(v => `
+    <div class="var-card ${v.featured?'featured':''}">
+      <div class="var-visual"><div class="var-emoji">${v.emoji}</div>${v.badge?`<div class="var-badge">${v.badge}</div>`:''}</div>
+      <div class="var-body">
+        <h3>${v.name}</h3><em class="var-origin">${v.origin}</em><p>${v.desc}</p>
+        <div class="var-meta">
+          <div class="var-meta-item"><span class="label">Sweetness</span><div class="var-bar"><div class="var-bar-fill" style="width:${v.sweet}%"></div></div></div>
+          <div class="var-meta-item"><span class="label">Aroma</span><div class="var-bar"><div class="var-bar-fill" style="width:${v.aroma}%"></div></div></div>
+          <div class="var-meta-item"><span class="label">Fibre</span><div class="var-bar"><div class="var-bar-fill" style="width:${v.fibre}%"></div></div></div>
+        </div>
+        <div class="var-price"><span class="var-from">From</span><span class="var-amount">₹${v.price}</span><span class="var-unit">/dozen</span></div>
+        <button class="btn-royal" style="width:100%;justify-content:center"><span>Pre-Order Now</span></button>
+      </div>
+    </div>`).join('');
+
+  // F2H steps
+  const fEl = document.getElementById('f2hSteps');
+  fEl.innerHTML = f2hData.map((s,i) => `
+    <div class="f2h-step">
+      <div class="f2h-visual"><div class="f2h-circle"><span>${s.icon}</span></div>${i<f2hData.length-1?'<div class="f2h-connector"></div>':''}</div>
+      <div class="f2h-content"><span class="f2h-num">${String(i+1).padStart(2,'0')}</span><h3>${s.title}</h3><p>${s.desc}</p><span class="f2h-time">${s.time}</span></div>
+    </div>`).join('');
+
+  // Testimonials
+  const tEl = document.getElementById('testGrid');
+  tEl.innerHTML = testData.map(t => `
+    <div class="test-card">
+      <div class="test-quote">"</div><p class="test-text">${t.text}</p><div class="test-divider"></div>
+      <div class="test-author"><div class="test-avatar">${t.init}</div><div><strong>${t.name}</strong><br><small>${t.loc}</small></div></div>
+      <div class="test-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+    </div>`).join('');
+}
+renderSections();
+
+// ═══════════════════════════════════════════════════════════════
+// LOADER ANIMATION
+// ═══════════════════════════════════════════════════════════════
+gsap.registerPlugin(ScrollTrigger);
+
+function playLoader() {
+  const stages = document.querySelectorAll('#loaderSvg .ls');
+  const glow = document.getElementById('loaderGlow');
+  const brand = document.getElementById('loaderBrand');
+  const tag = document.getElementById('loaderTagline');
+  const bar = document.getElementById('progressBar');
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      gsap.to('#loader', { opacity: 0, duration: 0.6, ease: 'power2.inOut', onComplete: () => {
+        document.getElementById('loader').style.display = 'none';
+        document.body.classList.remove('loading');
+        document.getElementById('site').classList.add('visible');
+        initAnimations();
+      }});
+    }
+  });
+
+  tl.to(bar, { width: '100%', duration: 3.8, ease: 'power1.inOut' }, 0);
+  tl.to(glow, { scale: 1.3, opacity: 0.8, duration: 0.5 }, 0.2);
+  tl.to(stages[0], { opacity: 0, duration: 0.3 }, 0.7)
+    .to(stages[1], { opacity: 1, duration: 0.4 }, 0.8)
+    .to(glow, { scale: 1.5, duration: 0.4 }, 0.8);
+  tl.to(stages[1], { opacity: 0, duration: 0.3 }, 1.5)
+    .to(stages[2], { opacity: 1, duration: 0.4 }, 1.6)
+    .to(glow, { scale: 1.8, duration: 0.4 }, 1.6);
+  tl.to(stages[2], { opacity: 0, duration: 0.3 }, 2.3)
+    .to(stages[3], { opacity: 1, duration: 0.5, ease: 'back.out(1.7)' }, 2.4)
+    .to(glow, { scale: 2.5, duration: 0.6 }, 2.4);
+  tl.to(brand, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 2.8)
+    .fromTo(brand, { y: 20 }, { y: 0, duration: 0.8 }, 2.8);
+  tl.to(tag, { opacity: 1, duration: 0.6 }, 3.2);
+  tl.to(glow, { scale: 3, opacity: 0, duration: 0.5 }, 3.6);
+}
+playLoader();
+
+// ═══════════════════════════════════════════════════════════════
+// THREE.JS — HERO MANGO
+// ═══════════════════════════════════════════════════════════════
+let heroScene, heroCamera, heroRenderer, heroMango, heroClock, heroLeaves=[], heroParticles;
+
+function initHeroScene() {
+  const container = document.getElementById('heroCanvas');
+  if (!container) return;
+
+  heroScene = new THREE.Scene();
+  heroCamera = new THREE.PerspectiveCamera(45, container.clientWidth/container.clientHeight, 0.1, 100);
+  heroCamera.position.set(0, 0.5, 5);
+
+  heroRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  heroRenderer.setSize(container.clientWidth, container.clientHeight);
+  heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  heroRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+  heroRenderer.toneMappingExposure = 1.2;
+  container.appendChild(heroRenderer.domElement);
+
+  // Lights
+  heroScene.add(new THREE.AmbientLight(0xFDF5E6, 0.4));
+  const key = new THREE.DirectionalLight(0xFFD700, 1.8); key.position.set(3,5,4); heroScene.add(key);
+  const fill = new THREE.DirectionalLight(0xF5A623, 0.6); fill.position.set(-3,2,-2); heroScene.add(fill);
+  const rim = new THREE.DirectionalLight(0xFFE4B5, 0.8); rim.position.set(0,-2,-4); heroScene.add(rim);
+  const glow = new THREE.PointLight(0xC49B32, 1.2, 15); glow.position.set(0,4,2); heroScene.add(glow);
+
+  // Mango geometry
+  const geo = new THREE.SphereGeometry(1, 32, 24);
+  const pos = geo.attributes.position;
+  for (let i=0; i<pos.count; i++) {
+    let x=pos.getX(i), y=pos.getY(i), z=pos.getZ(i);
+    y*=1.3; x*=0.85+0.15*Math.cos(Math.atan2(z,x)*0.5);
+    const tf=Math.max(0,y)*0.3; x*=1-tf*0.4; z*=1-tf*0.4; x+=y*0.08;
+    pos.setXYZ(i,x,y,z);
+  }
+  geo.computeVertexNormals();
+
+  const mat = new THREE.MeshPhysicalMaterial({
+    color: 0xF5A623, emissive: 0xE8910C, emissiveIntensity: 0.15,
+    roughness: 0.35, metalness: 0.05, clearcoat: 0.8, clearcoatRoughness: 0.15
+  });
+
+  heroMango = new THREE.Mesh(geo, mat);
+  heroMango.scale.set(0.85, 1.0, 0.75);
+  heroScene.add(heroMango);
+
+  // Leaves
+  const leafGeo = new THREE.PlaneGeometry(0.4, 0.15, 4, 2);
+  const leafMat = new THREE.MeshPhysicalMaterial({ color: 0x4A7C3A, emissive: 0x1A3A10, emissiveIntensity: 0.1, roughness: 0.6, side: THREE.DoubleSide });
+  for (let i=0; i<5; i++) {
+    const leaf = new THREE.Mesh(leafGeo.clone(), leafMat.clone());
+    const angle = (i/5)*Math.PI*2;
+    leaf.position.set(Math.cos(angle)*1.3, 0.8+Math.random()*0.5, Math.sin(angle)*1.3);
+    leaf.rotation.set(Math.random()*0.5, angle, Math.random()*0.3);
+    heroScene.add(leaf);
+    heroLeaves.push(leaf);
+  }
+
+  // Particles
+  const pCount=80, pPos=new Float32Array(pCount*3);
+  for(let i=0;i<pCount;i++){pPos[i*3]=(Math.random()-.5)*8;pPos[i*3+1]=(Math.random()-.5)*8;pPos[i*3+2]=(Math.random()-.5)*4}
+  const pGeo=new THREE.BufferGeometry();pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+  heroParticles=new THREE.Points(pGeo,new THREE.PointsMaterial({color:0xFFD700,size:0.04,transparent:true,opacity:0.5,blending:THREE.AdditiveBlending,sizeAttenuation:true}));
+  heroScene.add(heroParticles);
+
+  heroClock = new THREE.Clock();
+  animateHero();
+
+  window.addEventListener('resize', () => {
+    heroCamera.aspect = container.clientWidth/container.clientHeight;
+    heroCamera.updateProjectionMatrix();
+    heroRenderer.setSize(container.clientWidth, container.clientHeight);
+  });
+}
+
+function animateHero() {
+  requestAnimationFrame(animateHero);
+  const d=heroClock.getDelta(), t=heroClock.getElapsedTime();
+  if(heroMango){
+    heroMango.rotation.y+=0.35*d;heroMango.rotation.x=Math.sin(t*0.5)*0.1;heroMango.position.y=Math.sin(t*0.8)*0.15;
+  }
+  heroLeaves.forEach((l,i)=>{l.rotation.z=Math.sin(t+i)*0.2;l.position.y=0.8+Math.sin(t*0.5+i*0.7)*0.1});
+  if(heroParticles){
+    const pa=heroParticles.geometry.attributes.position;
+    for(let i=0;i<pa.count;i++){let y=pa.getY(i);y+=d*0.15;if(y>4)y=-4;pa.setY(i,y);pa.setX(i,pa.getX(i)+Math.sin(t+i)*d*0.05)}
+    pa.needsUpdate=true;heroParticles.rotation.y=t*0.02;
+  }
+  heroRenderer.render(heroScene,heroCamera);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// THREE.JS — JOURNEY SIDEBAR MANGO MORPHING
+// ═══════════════════════════════════════════════════════════════
+let jScene,jCamera,jRenderer,jMango,jClock;
+const stageColors=[0x8B6914,0x6B9E3A,0x4A7C3A,0x2D5A1E,0xF5E6B8,0x7CB342,0xF5A623];
+const stageScales=[[.3,.45,.25],[.35,.7,.3],[.6,1,.5],[1,1.2,.9],[.9,.9,.9],[.7,.85,.65],[.85,1,.75]];
+
+function initJourneyScene(){
+  const c=document.getElementById('journeyCanvas'); if(!c||c.clientWidth===0)return;
+  jScene=new THREE.Scene();
+  jCamera=new THREE.PerspectiveCamera(45,1,0.1,100);jCamera.position.set(0,0.5,4.5);
+  jRenderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+  jRenderer.setSize(320,320);jRenderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  jRenderer.toneMapping=THREE.ACESFilmicToneMapping;jRenderer.toneMappingExposure=1.2;
+  c.appendChild(jRenderer.domElement);
+
+  jScene.add(new THREE.AmbientLight(0xFDF5E6,0.5));
+  const kl=new THREE.DirectionalLight(0xFFD700,1.5);kl.position.set(3,5,4);jScene.add(kl);
+  const fl=new THREE.DirectionalLight(0xF5A623,0.5);fl.position.set(-3,2,-2);jScene.add(fl);
+  const pg=new THREE.PointLight(0xC49B32,1,12);pg.position.set(0,3,2);jScene.add(pg);
+
+  const geo=new THREE.SphereGeometry(1,16,12);
+  jMango=new THREE.Mesh(geo,new THREE.MeshPhysicalMaterial({color:0x8B6914,emissive:0x3D2B06,emissiveIntensity:0.15,roughness:0.35,metalness:0.05,clearcoat:0.8,clearcoatRoughness:0.15}));
+  jMango.scale.set(.3,.45,.25);
+  jScene.add(jMango);
+  jClock=new THREE.Clock();
+  animateJourney();
+}
+
+function animateJourney(){
+  requestAnimationFrame(animateJourney);
+  if(!jMango)return;
+  const d=jClock.getDelta(),t=jClock.getElapsedTime();
+  jMango.rotation.y+=0.4*d;jMango.rotation.x=Math.sin(t*0.5)*0.1;jMango.position.y=Math.sin(t*0.8)*0.12;
+  jRenderer.render(jScene,jCamera);
+}
+
+function setJourneyStage(idx){
+  if(!jMango)return;
+  const m=jMango.material;
+  const col=new THREE.Color(stageColors[idx]);
+  gsap.to(m.color,{r:col.r,g:col.g,b:col.b,duration:0.6});
+  gsap.to(m.emissive,{r:col.r*0.3,g:col.g*0.3,b:col.b*0.3,duration:0.6});
+  const s=stageScales[idx];
+  gsap.to(jMango.scale,{x:s[0],y:s[1],z:s[2],duration:0.8,ease:'back.out(1.7)'});
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SCROLL ANIMATIONS
+// ═══════════════════════════════════════════════════════════════
+function initAnimations() {
+  // Hero entrance
+  const ht=gsap.timeline({delay:0.2});
+  ht.to('#heroBadge',{opacity:1,y:0,duration:0.8,ease:'power3.out'}).fromTo('#heroBadge',{y:20},{y:0,duration:0.8},'<')
+    .to('#heroTitle',{opacity:1,duration:1,ease:'power3.out'},'-=0.4').fromTo('#heroTitle',{y:40},{y:0,duration:1},'<')
+    .to('#heroSub',{opacity:1,duration:0.8,ease:'power3.out'},'-=0.5').fromTo('#heroSub',{y:30},{y:0,duration:0.8},'<')
+    .to('#heroActions',{opacity:1,duration:0.8,ease:'power3.out'},'-=0.4').fromTo('#heroActions',{y:20},{y:0,duration:0.8},'<')
+    .to('#heroScroll',{opacity:1,duration:1},'-=0.2');
+
+  // Reveal elements
+  gsap.utils.toArray('.reveal').forEach(el => {
+    gsap.fromTo(el, {y:60,opacity:0}, {y:0,opacity:1,duration:1,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 85%',toggleActions:'play none none reverse'}});
+  });
+
+  // Stagger cards
+  ['.special-grid .special-card','.varieties-showcase .var-card','.test-grid .test-card'].forEach(sel => {
+    gsap.fromTo(sel, {y:50,opacity:0,scale:0.95}, {y:0,opacity:1,scale:1,duration:0.8,stagger:0.12,ease:'power2.out',
+      scrollTrigger:{trigger:sel.split(' ')[0].replace('.','#').replace('-grid','Grid').replace('-showcase','Grid').replace('-grid','Grid'),start:'top 75%',toggleActions:'play none none reverse'}});
+  });
+
+  // Special cards stagger
+  gsap.fromTo('.special-card', {y:50,opacity:0},{y:0,opacity:1,duration:0.8,stagger:0.1,ease:'power2.out',
+    scrollTrigger:{trigger:'.special-grid',start:'top 75%',toggleActions:'play none none reverse'}});
+
+  gsap.fromTo('.var-card', {y:50,opacity:0},{y:0,opacity:1,duration:0.8,stagger:0.15,ease:'power2.out',
+    scrollTrigger:{trigger:'.varieties-showcase',start:'top 75%',toggleActions:'play none none reverse'}});
+
+  gsap.fromTo('.test-card', {y:50,opacity:0},{y:0,opacity:1,duration:0.8,stagger:0.1,ease:'power2.out',
+    scrollTrigger:{trigger:'.test-grid',start:'top 75%',toggleActions:'play none none reverse'}});
+
+  gsap.fromTo('.f2h-step', {y:40,opacity:0},{y:0,opacity:1,duration:0.7,stagger:0.12,ease:'power2.out',
+    scrollTrigger:{trigger:'#f2hSteps',start:'top 75%',toggleActions:'play none none reverse'}});
+
+  // Journey scroll-sync
+  ScrollTrigger.create({
+    trigger:'#journey',start:'top 20%',end:'bottom 80%',scrub:1.5,
+    onUpdate: (self) => {
+      const p=self.progress;
+      const idx=Math.min(Math.floor(p*journeyData.length),journeyData.length-1);
+      document.getElementById('journeyLabel').textContent=journeyData[idx].title;
+      setJourneyStage(idx);
+      document.querySelectorAll('.journey-stage').forEach((el,i) => {
+        el.classList.toggle('active', i<=idx);
+      });
+    }
+  });
+
+  // Footer falling mangoes
+  ScrollTrigger.create({
+    trigger:'#fallingArea',start:'top 80%',once:true,
+    onEnter: () => {
+      document.querySelectorAll('.mango-drop').forEach(m => {
+        const delay=parseFloat(m.dataset.delay||'0');
+        gsap.fromTo(m,{y:-60,opacity:1,rotation:0,scale:1},{y:200,opacity:0.6,rotation:gsap.utils.random(-30,30),scale:0.6,duration:gsap.utils.random(1.2,2),delay,ease:'bounce.out'});
+      });
+    }
+  });
+
+  // Init Three.js scenes
+  initHeroScene();
+  initJourneyScene();
+
+  ScrollTrigger.refresh();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// NAVBAR
+// ═══════════════════════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+document.getElementById('navToggle').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+document.querySelectorAll('.nav-link, .nav-cta').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('navToggle').classList.remove('open');
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+
+// Quantity adjuster
+let qty = 2;
+function adjustQty(d) {
+  qty = Math.max(1, Math.min(50, qty + d));
+  document.getElementById('qtyVal').textContent = qty;
+}
+
+// Smooth scroll for anchors
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>

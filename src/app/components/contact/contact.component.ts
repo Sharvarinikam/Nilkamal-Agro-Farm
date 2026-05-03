@@ -1,13 +1,15 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { ScrollAnimationService } from '../../services/scroll-animation.service';
+import { EmailService, OrderData } from '../../services/email.service';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, TranslateModule],
   template: `
     <section class="contact" id="contact">
       <div class="contact__container">
@@ -77,13 +79,42 @@ import { ScrollAnimationService } from '../../services/scroll-animation.service'
 export class ContactComponent implements AfterViewInit {
   form = { name: '', phone: '', city: '', variety: '', qty: 2, message: '' };
   submitted = false;
-  constructor(private scroll: ScrollAnimationService) {}
+  constructor(private scroll: ScrollAnimationService, private emailService: EmailService) {}
   ngAfterViewInit(): void { this.scroll.revealElements('.contact .reveal-el'); }
   adjustQty(delta: number): void { this.form.qty = Math.max(1, Math.min(50, this.form.qty + delta)); }
   onSubmit(): void {
-    if (!this.form.name || !this.form.phone || !this.form.city || !this.form.variety) { alert('Please fill in all required fields'); return; }
+    if (!this.form.name || !this.form.phone || !this.form.city || !this.form.variety) { 
+      alert('Please fill in all required fields'); 
+      return; 
+    }
+    
     this.submitted = true;
-    const summary = `Thank you for your order, ${this.form.name}!\n\nOrder Details:\n• Variety: ${this.form.variety}\n• Quantity: ${this.form.qty} dozen(s)\n• City: ${this.form.city}\n${this.form.message ? '• Notes: ' + this.form.message : ''}\n\nOur team will contact you within 24 hours.\n\nNikam Agro Farms`;
-    setTimeout(() => { this.submitted = false; alert(summary); }, 2000);
+    
+    const orderData: OrderData = {
+      name: this.form.name,
+      phone: this.form.phone,
+      city: this.form.city,
+      variety: this.form.variety,
+      qty: this.form.qty,
+      message: this.form.message
+    };
+    
+    this.emailService.sendOrder(orderData).subscribe({
+      next: (response) => {
+        this.submitted = false;
+        if (response.success) {
+          alert(response.message);
+          // Reset form
+          this.form = { name: '', phone: '', city: '', variety: '', qty: 2, message: '' };
+        } else {
+          alert('Failed to submit order. Please try again or call us directly.');
+        }
+      },
+      error: (error) => {
+        this.submitted = false;
+        console.error('Error submitting order:', error);
+        alert('Network error. Please try again or call us directly at +91 98765 43210.');
+      }
+    });
   }
 }

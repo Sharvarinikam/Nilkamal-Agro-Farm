@@ -6,7 +6,10 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "server": "node server.js",
+    "dev": "concurrently \"npm run server\" \"npm run start\"",
+    "build-and-serve": "npm run build && npm run server"
   },
   "private": true,
   "dependencies": {
@@ -20,7 +23,12 @@
     "@angular/router": "^17.3.0",
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^4.22.1",
     "gsap": "^3.12.5",
+    "nodemailer": "^6.10.1",
     "rxjs": "~7.8.0",
     "three": "^0.163.0",
     "tslib": "^2.6.0",

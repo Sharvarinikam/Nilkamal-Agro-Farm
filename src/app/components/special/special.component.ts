@@ -1,17 +1,18 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { ScrollAnimationService } from '../../services/scroll-animation.service';
 
 @Component({
   selector: 'app-special',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <section class="special" id="special">
       <div class="special__container">
         <div class="special__header">
-          <span class="subheading reveal-el">What Sets Us Apart</span>
-          <h2 class="section-title reveal-el">Why Our Mangoes<br><em class="section-title--gold">Reign Supreme</em></h2>
+          <span class="subheading reveal-el">{{ 'SPECIAL.TITLE' | translate }}</span>
+          <h2 class="section-title reveal-el" [innerHTML]="'SPECIAL.MAIN_TITLE' | translate"></h2>
           <div class="ornament reveal-el"><div class="ornament__diamond"></div></div>
         </div>
 
@@ -19,8 +20,8 @@ import { ScrollAnimationService } from '../../services/scroll-animation.service'
           <div class="special__card" *ngFor="let item of features; let i = index">
             <div class="special__card-number">{{ (i + 1).toString().padStart(2, '0') }}</div>
             <div class="special__card-icon">{{ item.icon }}</div>
-            <h3 class="special__card-title">{{ item.title }}</h3>
-            <p class="special__card-text">{{ item.desc }}</p>
+            <h3 class="special__card-title">{{ 'SPECIAL.FEATURE' + (i + 1) + '_TITLE' | translate }}</h3>
+            <p class="special__card-text">{{ 'SPECIAL.FEATURE' + (i + 1) + '_DESC' | translate }}</p>
             <div class="special__card-accent"></div>
           </div>
         </div>
@@ -30,9 +31,8 @@ import { ScrollAnimationService } from '../../services/scroll-animation.service'
           <div class="special__guarantee-inner">
             <span class="special__guarantee-icon">👑</span>
             <div>
-              <h4>The Nikam Farms Royal Promise</h4>
-              <p>Every box that leaves our farm carries our family's honour. If any mango doesn't
-                 meet your expectations, we replace the entire order — no questions asked.</p>
+              <h4>{{ 'SPECIAL.ROYAL_PROMISE' | translate }}</h4>
+              <p>{{ 'SPECIAL.ROYAL_PROMISE_DESC' | translate }}</p>
             </div>
           </div>
         </div>

@@ -1,11 +1,12 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { ScrollAnimationService } from '../../services/scroll-animation.service';
 
 @Component({
   selector: 'app-about',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <section class="about" id="about">
       <div class="about__ornament-top">
@@ -20,24 +21,24 @@ import { ScrollAnimationService } from '../../services/scroll-animation.service'
             <div class="about__image-border"></div>
           </div>
           <div class="about__stats">
-            <div class="about__stat" *ngFor="let stat of stats">
+            <div class="about__stat" *ngFor="let stat of stats; let i = index">
               <span class="about__stat-number">{{ stat.value }}</span>
-              <span class="about__stat-label">{{ stat.label }}</span>
+              <span class="about__stat-label">{{ 'ABOUT.STAT' + (i + 1) + '_LABEL' | translate }}</span>
             </div>
           </div>
         </div>
         <div class="about__right">
-          <span class="subheading reveal-el">Our Heritage</span>
-          <h2 class="section-title reveal-el">Three Generations<br>of Mango Royalty</h2>
+          <span class="subheading reveal-el">{{ 'ABOUT.HERITAGE' | translate }}</span>
+          <h2 class="section-title reveal-el" [innerHTML]="'ABOUT.MAIN_TITLE' | translate"></h2>
           <div class="ornament reveal-el"><div class="ornament__diamond"></div></div>
           <div class="about__text reveal-el">
-            <p>In 1952, our grandfather planted the first Alphonso saplings on the sun-drenched slopes of Pune. He believed that the finest mangoes come not from science alone, but from a deep reverence for the land, the seasons, and the ancient wisdom passed down through generations.</p>
-            <p>Today, Nilkamal Agro Farms spans over 15 acres of heritage orchards. Every mango that leaves our farm carries the warmth of our soil, the sweetness of monsoon rains, and the love of a family that has dedicated its life to growing the king of fruits.</p>
+            <p>{{ 'ABOUT.PARA1' | translate }}</p>
+            <p>{{ 'ABOUT.PARA2' | translate }}</p>
           </div>
           <div class="about__values reveal-el">
-            <div class="about__value" *ngFor="let value of values">
+            <div class="about__value" *ngFor="let value of values; let i = index">
               <span class="about__value-icon">{{ value.icon }}</span>
-              <div><strong>{{ value.title }}</strong><p>{{ value.desc }}</p></div>
+              <div><strong>{{ 'ABOUT.VALUE' + (i + 1) + '_TITLE' | translate }}</strong><p>{{ 'ABOUT.VALUE' + (i + 1) + '_DESC' | translate }}</p></div>
             </div>
           </div>
         </div>

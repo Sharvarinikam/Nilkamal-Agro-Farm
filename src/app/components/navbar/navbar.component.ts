@@ -2,12 +2,12 @@ import {
   Component, HostListener, AfterViewInit
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateService } from '@ngx-translate/core'; 
+import { TranslateModule, TranslateService } from '@ngx-translate/core'; 
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <nav class="nav" [class.nav--scrolled]="isScrolled" [class.nav--open]="menuOpen">
       <div class="nav__inner">
@@ -29,13 +29,19 @@ import { TranslateService } from '@ngx-translate/core';
         <ul class="nav__links" [class.nav__links--open]="menuOpen">
           <li *ngFor="let link of links">
             <a [href]="'#' + link.id" class="nav__link" (click)="menuOpen = false">
-              {{ link.label }}
+              {{ 'NAV.' + link.key | translate }}
             </a>
           </li>
           <li>
             <a href="#contact" class="nav__cta" (click)="menuOpen = false">
-              Order Now
+              {{ 'ORDER_NOW' | translate }}
             </a>
+          </li>
+          <li>
+            <button class="nav__lang-switch" (click)="switchLanguage()" [attr.aria-label]="'Switch language'">
+              <span class="nav__lang-icon">{{ currentLang === 'en' ? 'आ' : 'A' }}</span>
+              <span class="nav__lang-text">{{ currentLang === 'en' ? 'मराठी' : 'English' }}</span>
+            </button>
           </li>
         </ul>
       </div>
@@ -193,26 +199,71 @@ import { TranslateService } from '@ngx-translate/core';
           box-shadow: 0 4px 15px rgba(196, 155, 50, 0.4);
         }
       }
+
+      &__lang-switch {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: 'Jost', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: rgba(253, 245, 230, 0.75);
+        background: transparent;
+        border: 1px solid rgba(196, 155, 50, 0.3);
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+
+        &:hover {
+          border-color: rgba(196, 155, 50, 0.6);
+          color: #FFD700;
+          background: rgba(196, 155, 50, 0.1);
+        }
+      }
+
+      &__lang-icon {
+        font-size: 1rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background: rgba(196, 155, 50, 0.2);
+        border-radius: 50%;
+      }
+
+      &__lang-text {
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
     }
   `]
 })
 export class NavbarComponent {
   isScrolled = false;
   menuOpen = false;
+  currentLang = 'en';
 
-  constructor(private translate: TranslateService) {}
+  constructor(private translate: TranslateService) {
+    this.translate.setDefaultLang('en');
+    this.translate.use('en');
+  }
 
-  switchLang(lang: string) {
-    this.translate.use(lang);
+  switchLanguage(): void {
+    const newLang = this.currentLang === 'en' ? 'mr' : 'en';
+    this.currentLang = newLang;
+    this.translate.use(newLang);
   }
 
   links = [
-  { id: 'about', label: 'NAV.ABOUT' },
-  { id: 'journey', label: 'NAV.JOURNEY' },
-  { id: 'varieties', label: 'NAV.VARIETIES' },
-  { id: 'farm-to-home', label: 'NAV.FARM' },
-  { id: 'testimonials', label: 'NAV.TESTIMONIALS' }
-];
+    { id: 'about', key: 'ABOUT' },
+    { id: 'journey', key: 'JOURNEY' },
+    { id: 'varieties', key: 'VARIETIES' },
+    { id: 'farm-to-home', key: 'FARM' },
+    { id: 'testimonials', key: 'TESTIMONIALS' }
+  ];
 
   @HostListener('window:scroll')
   onScroll(): void {

@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, OnDestroy, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { ScrollAnimationService } from '../../services/scroll-animation.service';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -17,13 +18,16 @@ interface JourneyStage {
 @Component({
   selector: 'app-journey',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <section class="journey" id="journey" #journeySection>
       <div class="journey__header">
-        <span class="subheading reveal-el">The Sacred Lifecycle</span>
-        <h2 class="section-title reveal-el">From Seed to<br><em class="section-title--gold">Golden Perfection</em></h2>
-        <p class="section-subtitle reveal-el">Witness the miraculous journey of our Kesar</p>
+        <span class="subheading reveal-el">{{ 'JOURNEY.TITLE' | translate }}</span>
+        <h2 class="section-title reveal-el">
+            <span [innerHTML]="'JOURNEY.SUBTITLE' | translate"></span><br>
+            <em class="section-title--gold">{{ 'JOURNEY.SUBTITLE_GOLD' | translate }}</em>
+          </h2>
+        <p class="section-subtitle reveal-el">{{ 'JOURNEY.DESCRIPTION' | translate }}</p>
         <div class="ornament reveal-el"><div class="ornament__diamond"></div></div>
       </div>
       <div class="journey__timeline" #timeline>
@@ -35,14 +39,14 @@ interface JourneyStage {
               </div>
             </div>
           </div>
-          <div class="journey__stage-label" #stageLabel>{{ currentLabel }}</div>
+          <div class="journey__stage-label" #stageLabel>{{ 'JOURNEY.STAGE' + (currentStageIndex + 1) | translate }}</div>
         </div>
         <div class="journey__stages">
           <div class="journey__stage" *ngFor="let stage of stages; let i = index" [attr.data-index]="i" [class.active]="i <= currentStageIndex">
             <div class="journey__stage-marker" [style.borderColor]="stage.color"><span>{{ stage.icon }}</span></div>
             <div class="journey__stage-content">
-              <span class="journey__stage-step" [style.color]="stage.color">Stage {{ i + 1 }}</span>
-              <h3>{{ stage.title }}</h3><em>{{ stage.subtitle }}</em><p>{{ stage.description }}</p>
+              <span class="journey__stage-step" [style.color]="stage.color">{{ 'JOURNEY.STAGE' + (i + 1) | translate }}</span>
+              <h3>{{ 'JOURNEY.STAGE' + (i + 1) | translate }}</h3><em>{{ 'JOURNEY.STAGE' + (i + 1) + '_SUB' | translate }}</em><p>{{ 'JOURNEY.STAGE' + (i + 1) + '_DESC' | translate }}</p>
             </div>
           </div>
         </div>
@@ -82,7 +86,7 @@ export class JourneyComponent implements AfterViewInit, OnDestroy {
   @ViewChild('journeySection') journeySection!: ElementRef;
   @ViewChild('stageLabel') stageLabel!: ElementRef;
 
-  currentLabel = 'The Seed';
+  currentLabel = '';
   currentStageIndex = 0;
   private scrollTriggers: ScrollTrigger[] = [];
 
@@ -99,7 +103,7 @@ export class JourneyComponent implements AfterViewInit, OnDestroy {
   constructor(private scroll: ScrollAnimationService, private ngZone: NgZone) {}
 
   getImagePath(stageIndex: number): string {
-    return `/assets/images/stage-${stageIndex + 1}.jpeg`;
+    return `/assets/stage-${stageIndex + 1}.jpeg`;
   }
 
   ngAfterViewInit(): void {
@@ -114,7 +118,6 @@ export class JourneyComponent implements AfterViewInit, OnDestroy {
         const idx = Math.min(Math.floor(progress * this.stages.length), this.stages.length - 1);
         this.ngZone.run(() => {
           this.currentStageIndex = idx;
-          this.currentLabel = this.stages[idx].title;
         });
         stages.forEach((el: Element, i: number) => { el.classList.toggle('active', i <= idx); });
       },

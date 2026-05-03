@@ -1,42 +1,43 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { ScrollAnimationService } from '../../services/scroll-animation.service';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   template: `
     <section class="contact" id="contact">
       <div class="contact__container">
         <div class="contact__left">
-          <span class="subheading reveal-el">Get In Touch</span>
-          <h2 class="section-title reveal-el">Order Your<br><em class="section-title--gold">Royal Harvest</em></h2>
+          <span class="subheading reveal-el">{{ 'CONTACT.TITLE' | translate }}</span>
+          <h2 class="section-title reveal-el" [innerHTML]="'CONTACT.MAIN_TITLE' | translate"></h2>
           <div class="ornament reveal-el"><div class="ornament__diamond"></div></div>
           <div class="contact__info reveal-el">
-            <div class="contact__info-item"><span class="contact__info-icon">📍</span><div><strong>Farm Address</strong><p>Nikam Agro Farms, Village Nate, Taluka Ratnagiri,<br>District Ratnagiri, Maharashtra 415612</p></div></div>
-            <div class="contact__info-item"><span class="contact__info-icon">📞</span><div><strong>Phone &amp; WhatsApp</strong><p>+91 98765 43210</p></div></div>
-            <div class="contact__info-item"><span class="contact__info-icon">✉️</span><div><strong>Email</strong><p>orders&#64;nikamagrofarms.com</p></div></div>
-            <div class="contact__info-item"><span class="contact__info-icon">🕐</span><div><strong>Season</strong><p>Pre-orders: January – March<br>Deliveries: April – June</p></div></div>
+            <div class="contact__info-item"><span class="contact__info-icon">📍</span><div><strong>{{ 'CONTACT.FARM_ADDRESS' | translate }}</strong><p>{{ 'CONTACT.FARM_ADDRESS_TEXT' | translate }}</p></div></div>
+            <div class="contact__info-item"><span class="contact__info-icon">📞</span><div><strong>{{ 'CONTACT.PHONE' | translate }}</strong><p>+91 98765 43210</p></div></div>
+            <div class="contact__info-item"><span class="contact__info-icon">✉️</span><div><strong>{{ 'CONTACT.EMAIL' | translate }}</strong><p>orders&#64;nikamagrofarms.com</p></div></div>
+            <div class="contact__info-item"><span class="contact__info-icon">🕐</span><div><strong>{{ 'CONTACT.SEASON' | translate }}</strong><p>{{ 'CONTACT.SEASON_TEXT' | translate }}</p></div></div>
           </div>
         </div>
         <div class="contact__right reveal-el">
           <div class="contact__form-wrapper">
-            <h3 class="contact__form-title">Place Your Order</h3>
-            <p class="contact__form-sub">Fill in your details and our team will call you within 24 hours</p>
+            <h3 class="contact__form-title">{{ 'CONTACT.FORM_TITLE' | translate }}</h3>
+            <p class="contact__form-sub">{{ 'CONTACT.FORM_SUB' | translate }}</p>
             <div class="contact__form">
-              <div class="contact__field"><label>Full Name</label><input type="text" placeholder="Your full name" [(ngModel)]="form.name"></div>
-              <div class="contact__field"><label>Phone Number</label><input type="tel" placeholder="+91 XXXXX XXXXX" [(ngModel)]="form.phone"></div>
-              <div class="contact__field"><label>City</label><input type="text" placeholder="Delivery city" [(ngModel)]="form.city"></div>
-              <div class="contact__field"><label>Variety Preference</label>
-                <select [(ngModel)]="form.variety"><option value="">Select variety</option><option value="alphonso">Alphonso Hapus (Ratnagiri)</option><option value="kesar">Kesar</option><option value="devgad">Devgad Hapus</option><option value="mixed">Mixed Royal Box</option></select>
+              <div class="contact__field"><label>{{ 'CONTACT.FULL_NAME' | translate }}</label><input type="text" placeholder="{{ 'CONTACT.PHONE_PLACEHOLDER' | translate }}" [(ngModel)]="form.name"></div>
+              <div class="contact__field"><label>{{ 'CONTACT.PHONE_NUMBER' | translate }}</label><input type="tel" placeholder="{{ 'CONTACT.PHONE_PLACEHOLDER2' | translate }}" [(ngModel)]="form.phone"></div>
+              <div class="contact__field"><label>{{ 'CONTACT.CITY' | translate }}</label><input type="text" placeholder="{{ 'CONTACT.CITY_PLACEHOLDER' | translate }}" [(ngModel)]="form.city"></div>
+              <div class="contact__field"><label>{{ 'CONTACT.VARIETY_PREF' | translate }}</label>
+                <select [(ngModel)]="form.variety"><option value="">{{ 'CONTACT.SELECT_VARIETY' | translate }}</option><option value="alphonso">{{ 'CONTACT.ALPHONSO' | translate }}</option><option value="kesar">{{ 'CONTACT.KESAR_OPT' | translate }}</option><option value="devgad">{{ 'CONTACT.DEVGAD' | translate }}</option><option value="mixed">{{ 'CONTACT.MIXED' | translate }}</option></select>
               </div>
-              <div class="contact__field contact__field--full"><label>Quantity (Dozens)</label>
+              <div class="contact__field contact__field--full"><label>{{ 'CONTACT.QUANTITY' | translate }}</label>
                 <div class="contact__qty"><button (click)="adjustQty(-1)" class="contact__qty-btn">−</button><span class="contact__qty-val">{{ form.qty }}</span><button (click)="adjustQty(1)" class="contact__qty-btn">+</button></div>
               </div>
-              <div class="contact__field contact__field--full"><label>Special Requests</label><textarea rows="3" placeholder="Gift wrapping, specific dates, etc." [(ngModel)]="form.message"></textarea></div>
-              <button class="btn-royal contact__submit" (click)="onSubmit()" [disabled]="submitted"><span>{{ submitted ? 'Processing...' : 'Submit Order Request' }}</span></button>
+              <div class="contact__field contact__field--full"><label>{{ 'CONTACT.SPECIAL_REQUESTS' | translate }}</label><textarea rows="3" placeholder="{{ 'CONTACT.SPECIAL_PLACEHOLDER' | translate }}" [(ngModel)]="form.message"></textarea></div>
+              <button class="btn-royal contact__submit" (click)="onSubmit()" [disabled]="submitted"><span>{{ submitted ? ('CONTACT.PROCESSING' | translate) : ('CONTACT.SUBMIT_ORDER' | translate) }}</span></button>
             </div>
           </div>
         </div>

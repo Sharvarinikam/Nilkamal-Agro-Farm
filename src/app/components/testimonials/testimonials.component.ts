@@ -1,26 +1,25 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { ScrollAnimationService } from '../../services/scroll-animation.service';
 
 @Component({
   selector: 'app-testimonials',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <section class="test" id="testimonials">
       <div class="test__container">
         <div class="test__header">
-          <span class="subheading reveal-el">Words of Honour</span>
-          <h2 class="section-title reveal-el" style="color:#FDF5E6">
-            Loved by<br><em class="section-title--gold">Connoisseurs</em>
-          </h2>
+          <span class="subheading reveal-el">{{ 'TESTIMONIALS.TITLE' | translate }}</span>
+          <h2 class="section-title reveal-el" style="color:#FDF5E6" [innerHTML]="'TESTIMONIALS.MAIN_TITLE' | translate"></h2>
           <div class="ornament reveal-el"><div class="ornament__diamond"></div></div>
         </div>
 
         <div class="test__grid">
-          <div class="test__card" *ngFor="let t of testimonials">
+          <div class="test__card" *ngFor="let t of testimonials; let i = index">
             <div class="test__card-quote">"</div>
-            <p class="test__card-text">{{ t.text }}</p>
+            <p class="test__card-text">{{ 'TESTIMONIALS.REVIEW' + (i + 1) | translate }}</p>
             <div class="test__card-divider"></div>
             <div class="test__card-author">
               <div class="test__card-avatar">{{ t.initials }}</div>
@@ -39,7 +38,7 @@ import { ScrollAnimationService } from '../../services/scroll-animation.service'
         <div class="test__proof reveal-el">
           <div class="test__proof-item" *ngFor="let p of proofs">
             <span class="test__proof-num">{{ p.value }}</span>
-            <span class="test__proof-label">{{ p.label }}</span>
+            <span class="test__proof-label">{{ 'TESTIMONIALS.' + p.labelKey | translate }}</span>
           </div>
         </div>
       </div>
@@ -241,10 +240,10 @@ export class TestimonialsComponent implements AfterViewInit {
   ];
 
   proofs = [
-    { value: '15,000+', label: 'Happy Families' },
-    { value: '4.9★', label: 'Average Rating' },
-    { value: '98%', label: 'Repeat Customers' },
-    { value: '12', label: 'States Delivered' },
+    { value: '15,000+', labelKey: 'HAPPY_FAMILIES' },
+    { value: '4.9★', labelKey: 'AVERAGE_RATING' },
+    { value: '98%', labelKey: 'REPEAT_CUSTOMERS' },
+    { value: '12', labelKey: 'STATES_DELIVERED' },
   ];
 
   constructor(private scroll: ScrollAnimationService) {}

@@ -2,12 +2,13 @@ import {
   Component, AfterViewInit, ViewChild, ElementRef, OnDestroy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { gsap } from 'gsap';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <section class="hero" id="hero">
       <div class="hero__bg">
@@ -20,7 +21,7 @@ import { gsap } from 'gsap';
           <div class="hero__mango" #mango>
             <div class="hero__image-slideshow">
               <img *ngFor="let stage of [1,2,3,4,5,6,7]; let i = index"
-                [src]="'/assets/images/stage-' + stage + '.jpeg'"
+                [src]="'/assets/stage-' + stage + '.jpeg'"
                 [alt]="'Stage ' + stage"
                 [class.active]="i === currentImageIndex"
                 class="hero__slideshow-image">
@@ -39,29 +40,28 @@ import { gsap } from 'gsap';
       <div class="hero__content">
         <div class="hero__badge" #badge>
           <span class="hero__badge-diamond">&#9670;</span>
-          <span>Est. 1952 &middot; Ratnagiri, Maharashtra</span>
+          <span>{{ 'HERO.BADGE' | translate }}</span>
           <span class="hero__badge-diamond">&#9670;</span>
         </div>
         <h1 class="hero__title" #title>
-          <span class="hero__title-line">The Royal</span>
-          <span class="hero__title-line hero__title-line--gold">Heritage</span>
-          <span class="hero__title-line">of Alphonso</span>
+          <span class="hero__title-line">{{ 'HERO.TITLE_LINE1' | translate }}</span>
+          <span class="hero__title-line hero__title-line--gold">{{ 'HERO.TITLE_LINE2' | translate }}</span>
+          <span class="hero__title-line">{{ 'HERO.TITLE_LINE3' | translate }}</span>
         </h1>
         <p class="hero__subtitle" #subtitle>
-          Three generations of passion. One extraordinary mango.<br>
-          Handpicked from our sun-blessed orchards in the Konkan coast.
+          {{ 'HERO.SUBTITLE' | translate }}
         </p>
         <div class="hero__actions" #actions>
-          <a href="#varieties" class="btn-royal"><span>Explore Varieties</span></a>
-          <a href="#about" class="btn-outline"><span>Our Legacy</span></a>
+          <a href="#varieties" class="btn-royal"><span>{{ 'HERO.EXPLORE_VARIETIES' | translate }}</span></a>
+          <a href="#about" class="btn-outline"><span>{{ 'HERO.OUR_LEGACY' | translate }}</span></a>
         </div>
         <div class="hero__features">
-          <div class="hero__feature" #feature1><span class="hero__feature-icon">&#128081;</span><span class="hero__feature-text">Royal GI Tagged</span></div>
-          <div class="hero__feature" #feature2><span class="hero__feature-icon">&#127807;</span><span class="hero__feature-text">Chemical-Free</span></div>
-          <div class="hero__feature" #feature3><span class="hero__feature-icon">&#127942;</span><span class="hero__feature-text">Award Winning</span></div>
+          <div class="hero__feature" #feature1><span class="hero__feature-icon">&#128081;</span><span class="hero__feature-text">{{ 'HERO.FEATURE1' | translate }}</span></div>
+          <div class="hero__feature" #feature2><span class="hero__feature-icon">&#127807;</span><span class="hero__feature-text">{{ 'HERO.FEATURE2' | translate }}</span></div>
+          <div class="hero__feature" #feature3><span class="hero__feature-icon">&#127942;</span><span class="hero__feature-text">{{ 'HERO.FEATURE3' | translate }}</span></div>
         </div>
       </div>
-      <div class="hero__scroll-hint" #scrollHint><div class="hero__scroll-line"></div><span>Scroll to Discover</span></div>
+      <div class="hero__scroll-hint" #scrollHint><div class="hero__scroll-line"></div><span>{{ 'HERO.SCROLL_HINT' | translate }}</span></div>
       <div class="hero__corner hero__corner--tl"></div><div class="hero__corner hero__corner--tr"></div>
       <div class="hero__corner hero__corner--bl"></div><div class="hero__corner hero__corner--br"></div>
     </section>

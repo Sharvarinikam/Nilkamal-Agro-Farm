@@ -1,18 +1,19 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { ScrollAnimationService } from '../../services/scroll-animation.service';
 
 @Component({
   selector: 'app-varieties',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <section class="varieties" id="varieties">
       <div class="varieties__container">
         <div class="varieties__header">
-          <span class="subheading reveal-el">Our Royal Collection</span>
-          <h2 class="section-title reveal-el" style="color: #FDF5E6">The Mango<br><em class="section-title--gold">Crown Jewels</em></h2>
-          <p class="section-subtitle reveal-el" style="color: rgba(253,245,230,0.5); margin: 0 auto;">Each variety — a jewel in the crown of Indian mangoes</p>
+          <span class="subheading reveal-el">{{ 'VARIETIES.TITLE' | translate }}</span>
+          <h2 class="section-title reveal-el" style="color: #FDF5E6" [innerHTML]="'VARIETIES.MAIN_TITLE' | translate"></h2>
+          <p class="section-subtitle reveal-el" style="color: rgba(253,245,230,0.5); margin: 0 auto;">{{ 'VARIETIES.SUBTITLE' | translate }}</p>
           <div class="ornament reveal-el"><div class="ornament__diamond"></div></div>
         </div>
         <div class="varieties__showcase">
@@ -22,16 +23,16 @@ import { ScrollAnimationService } from '../../services/scroll-animation.service'
               <div class="varieties__card-badge" *ngIf="mango.badge">{{ mango.badge }}</div>
             </div>
             <div class="varieties__card-body">
-              <h3>{{ mango.name }}</h3>
-              <em class="varieties__card-origin">{{ mango.origin }}</em>
-              <p>{{ mango.description }}</p>
+              <h3>{{ 'VARIETIES.KESAR_NAME' | translate }}</h3>
+              <em class="varieties__card-origin">{{ 'VARIETIES.KESAR_ORIGIN' | translate }}</em>
+              <p>{{ 'VARIETIES.KESAR_DESC' | translate }}</p>
               <div class="varieties__card-meta">
-                <div class="varieties__card-meta-item"><span class="label">Sweetness</span><div class="varieties__bar"><div class="varieties__bar-fill" [style.width.%]="mango.sweetness"></div></div></div>
-                <div class="varieties__card-meta-item"><span class="label">Aroma</span><div class="varieties__bar"><div class="varieties__bar-fill" [style.width.%]="mango.aroma"></div></div></div>
-                <div class="varieties__card-meta-item"><span class="label">Fibre</span><div class="varieties__bar"><div class="varieties__bar-fill" [style.width.%]="mango.fibre"></div></div></div>
+                <div class="varieties__card-meta-item"><span class="label">{{ 'VARIETIES.SWEETNESS' | translate }}</span><div class="varieties__bar"><div class="varieties__bar-fill" [style.width.%]="mango.sweetness"></div></div></div>
+                <div class="varieties__card-meta-item"><span class="label">{{ 'VARIETIES.AROMA' | translate }}</span><div class="varieties__bar"><div class="varieties__bar-fill" [style.width.%]="mango.aroma"></div></div></div>
+                <div class="varieties__card-meta-item"><span class="label">{{ 'VARIETIES.FIBRE' | translate }}</span><div class="varieties__bar"><div class="varieties__bar-fill" [style.width.%]="mango.fibre"></div></div></div>
               </div>
-              <div class="varieties__card-price"><span class="varieties__card-from">From</span><span class="varieties__card-amount">₹{{ mango.price }}</span><span class="varieties__card-unit">/dozen</span></div>
-              <button class="btn-royal varieties__card-btn" (click)="preOrder(mango)"><span>Pre-Order Now</span></button>
+              <div class="varieties__card-price"><span class="varieties__card-from">{{ 'VARIETIES.FROM' | translate }}</span><span class="varieties__card-amount">₹{{ mango.price }}</span><span class="varieties__card-unit">{{ 'VARIETIES.PER_DOZEN' | translate }}</span></div>
+              <button class="btn-royal varieties__card-btn" (click)="preOrder(mango)"><span>{{ 'VARIETIES.PRE_ORDER_NOW' | translate }}</span></button>
             </div>
           </div>
         </div>

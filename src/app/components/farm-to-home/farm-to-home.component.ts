@@ -1,17 +1,18 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { ScrollAnimationService } from '../../services/scroll-animation.service';
 
 @Component({
   selector: 'app-farm-to-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <section class="f2h" id="farm-to-home">
       <div class="f2h__container">
         <div class="f2h__header">
-          <span class="subheading reveal-el">The Royal Passage</span>
-          <h2 class="section-title reveal-el">From Our Orchards<br><em class="section-title--gold">To Your Table</em></h2>
+          <span class="subheading reveal-el">{{ 'FARM_TO_HOME.TITLE' | translate }}</span>
+          <h2 class="section-title reveal-el" [innerHTML]="'FARM_TO_HOME.MAIN_TITLE' | translate"></h2>
           <div class="ornament reveal-el"><div class="ornament__diamond"></div></div>
         </div>
 
@@ -25,16 +26,16 @@ import { ScrollAnimationService } from '../../services/scroll-animation.service'
             </div>
             <div class="f2h__step-content">
               <span class="f2h__step-num">{{ (i + 1).toString().padStart(2, '0') }}</span>
-              <h3>{{ step.title }}</h3>
-              <p>{{ step.desc }}</p>
-              <span class="f2h__step-time">{{ step.time }}</span>
+              <h3>{{ 'FARM_TO_HOME.STEP' + (i + 1) + '_TITLE' | translate }}</h3>
+              <p>{{ 'FARM_TO_HOME.STEP' + (i + 1) + '_DESC' | translate }}</p>
+              <span class="f2h__step-time">{{ 'FARM_TO_HOME.STEP' + (i + 1) + '_TIME' | translate }}</span>
             </div>
           </div>
         </div>
 
         <div class="f2h__cta reveal-el">
-          <p>From tree to your doorstep in under a wwek. That's the Nilkamal Farms promise.</p>
-          <a href="#contact" class="btn-royal"><span>Order Fresh Mangoes</span></a>
+          <p>{{ 'FARM_TO_HOME.CTA_TEXT' | translate }}</p>
+          <a href="#contact" class="btn-royal"><span>{{ 'FARM_TO_HOME.ORDER_FRESH' | translate }}</span></a>
         </div>
       </div>
     </section>

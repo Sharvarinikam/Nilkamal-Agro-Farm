@@ -83,6 +83,10 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
       &__logo-icon {
         font-size: 1.8rem;
         filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        
+        @media (max-width: 480px) {
+          font-size: 1.5rem;
+        }
       }
 
       &__logo-text {
@@ -97,6 +101,10 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
         font-weight: 700;
         color: #FFD700;
         letter-spacing: 0.04em;
+        
+        @media (max-width: 480px) {
+          font-size: 1.2rem;
+        }
       }
 
       &__logo-sub {
@@ -105,6 +113,10 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
         color: rgba(212, 168, 84, 0.7);
         letter-spacing: 0.35em;
         text-transform: uppercase;
+        
+        @media (max-width: 480px) {
+          font-size: 0.6rem;
+        }
       }
 
       &__toggle {
@@ -114,7 +126,13 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
         padding: 8px;
         z-index: 1001;
 
-        @media (max-width: 768px) { display: flex; }
+        @media (max-width: 768px) { 
+          display: flex; 
+        }
+        
+        @media (max-width: 480px) {
+          padding: 6px;
+        }
       }
 
       &__toggle-line {

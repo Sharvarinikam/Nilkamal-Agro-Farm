@@ -5,7 +5,8 @@ import { Observable } from 'rxjs';
 export interface OrderData {
   name: string;
   phone: string;
-  city: string;
+  email: string;
+  city?: string;
   variety: string;
   qty: number;
   message?: string;

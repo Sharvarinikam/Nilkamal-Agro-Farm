@@ -18,10 +18,10 @@ import { EmailService, OrderData } from '../../services/email.service';
           <h2 class="section-title reveal-el" [innerHTML]="'CONTACT.MAIN_TITLE' | translate"></h2>
           <div class="ornament reveal-el"><div class="ornament__diamond"></div></div>
           <div class="contact__info reveal-el">
-            <div class="contact__info-item"><span class="contact__info-icon">📍</span><div><strong>{{ 'CONTACT.FARM_ADDRESS' | translate }}</strong><p>{{ 'CONTACT.FARM_ADDRESS_TEXT' | translate }}</p></div></div>
+            <div class="contact__info-item"><span class="contact__info-icon">📍</span><div><strong>{{ 'CONTACT.FARM_ADDRESS' | translate }}</strong><p [innerHTML]="'CONTACT.FARM_ADDRESS_TEXT' | translate"></p></div></div>
             <div class="contact__info-item"><span class="contact__info-icon">📞</span><div><strong>{{ 'CONTACT.PHONE' | translate }}</strong><p>+91 98765 43210</p></div></div>
-            <div class="contact__info-item"><span class="contact__info-icon">✉️</span><div><strong>{{ 'CONTACT.EMAIL' | translate }}</strong><p>orders&#64;nikamagrofarms.com</p></div></div>
-            <div class="contact__info-item"><span class="contact__info-icon">🕐</span><div><strong>{{ 'CONTACT.SEASON' | translate }}</strong><p>{{ 'CONTACT.SEASON_TEXT' | translate }}</p></div></div>
+            <div class="contact__info-item"><span class="contact__info-icon">✉️</span><div><strong>{{ 'CONTACT.EMAIL' | translate }}</strong><p>orders&#64;nilkamagrofarms.com</p></div></div>
+            <div class="contact__info-item"><span class="contact__info-icon">🕐</span><div><strong>{{ 'CONTACT.SEASON' | translate }}</strong><p [innerHTML]="'CONTACT.SEASON_TEXT' | translate"></p></div></div>
           </div>
         </div>
         <div class="contact__right reveal-el">
@@ -29,10 +29,11 @@ import { EmailService, OrderData } from '../../services/email.service';
             <h3 class="contact__form-title">{{ 'CONTACT.FORM_TITLE' | translate }}</h3>
             <p class="contact__form-sub">{{ 'CONTACT.FORM_SUB' | translate }}</p>
             <div class="contact__form">
-              <div class="contact__field"><label>{{ 'CONTACT.FULL_NAME' | translate }}</label><input type="text" placeholder="{{ 'CONTACT.PHONE_PLACEHOLDER' | translate }}" [(ngModel)]="form.name"></div>
-              <div class="contact__field"><label>{{ 'CONTACT.PHONE_NUMBER' | translate }}</label><input type="tel" placeholder="{{ 'CONTACT.PHONE_PLACEHOLDER2' | translate }}" [(ngModel)]="form.phone"></div>
+              <div class="contact__field"><label>{{ 'CONTACT.FULL_NAME' | translate }} <span class="required">*</span></label><input type="text" placeholder="{{ 'CONTACT.PHONE_PLACEHOLDER' | translate }}" [(ngModel)]="form.name"></div>
+              <div class="contact__field"><label>{{ 'CONTACT.PHONE_NUMBER' | translate }} <span class="required">*</span></label><input type="tel" placeholder="{{ 'CONTACT.PHONE_PLACEHOLDER2' | translate }}" [(ngModel)]="form.phone"></div>
+              <div class="contact__field"><label>{{ 'CONTACT.EMAIL' | translate }} <span class="required">*</span></label><input type="email" placeholder="your.email@example.com" [(ngModel)]="form.email" required></div>
               <div class="contact__field"><label>{{ 'CONTACT.CITY' | translate }}</label><input type="text" placeholder="{{ 'CONTACT.CITY_PLACEHOLDER' | translate }}" [(ngModel)]="form.city"></div>
-              <div class="contact__field"><label>{{ 'CONTACT.VARIETY_PREF' | translate }}</label>
+              <div class="contact__field"><label>{{ 'CONTACT.VARIETY_PREF' | translate }} <span class="required">*</span></label>
                 <select [(ngModel)]="form.variety"><option value="">{{ 'CONTACT.SELECT_VARIETY' | translate }}</option><option value="alphonso">{{ 'CONTACT.ALPHONSO' | translate }}</option><option value="kesar">{{ 'CONTACT.KESAR_OPT' | translate }}</option><option value="devgad">{{ 'CONTACT.DEVGAD' | translate }}</option><option value="mixed">{{ 'CONTACT.MIXED' | translate }}</option></select>
               </div>
               <div class="contact__field contact__field--full"><label>{{ 'CONTACT.QUANTITY' | translate }}</label>
@@ -74,16 +75,17 @@ import { EmailService, OrderData } from '../../services/email.service';
     .contact__qty-btn:hover{background:rgba(196,155,50,.15)}
     .contact__qty-val{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#FFD700;min-width:50px;text-align:center}
     .contact__submit{grid-column:1/-1;width:100%;justify-content:center;margin-top:8px}
+    .required{color:#ff4444;font-weight:700;margin-left:2px}
   `]
 })
 export class ContactComponent implements AfterViewInit {
-  form = { name: '', phone: '', city: '', variety: '', qty: 2, message: '' };
+  form = { name: '', phone: '', email: '', city: '', variety: 'mixed', qty: 2, message: '' };
   submitted = false;
   constructor(private scroll: ScrollAnimationService, private emailService: EmailService) {}
   ngAfterViewInit(): void { this.scroll.revealElements('.contact .reveal-el'); }
   adjustQty(delta: number): void { this.form.qty = Math.max(1, Math.min(50, this.form.qty + delta)); }
   onSubmit(): void {
-    if (!this.form.name || !this.form.phone || !this.form.city || !this.form.variety) { 
+    if (!this.form.name || !this.form.phone || !this.form.email || !this.form.variety) { 
       alert('Please fill in all required fields'); 
       return; 
     }
@@ -93,6 +95,7 @@ export class ContactComponent implements AfterViewInit {
     const orderData: OrderData = {
       name: this.form.name,
       phone: this.form.phone,
+      email: this.form.email,
       city: this.form.city,
       variety: this.form.variety,
       qty: this.form.qty,
@@ -105,7 +108,7 @@ export class ContactComponent implements AfterViewInit {
         if (response.success) {
           alert(response.message);
           // Reset form
-          this.form = { name: '', phone: '', city: '', variety: '', qty: 2, message: '' };
+          this.form = { name: '', phone: '', email: '', city: '', variety: 'mixed', qty: 2, message: '' };
         } else {
           alert('Failed to submit order. Please try again or call us directly.');
         }

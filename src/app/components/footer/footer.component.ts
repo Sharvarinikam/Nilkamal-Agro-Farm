@@ -45,7 +45,7 @@ interface TreeData {
             <div class="footer__logo">
               <span class="footer__logo-icon">🥭</span>
               <div>
-                <span class="footer__logo-name">Nikam Farms</span>
+                <span class="footer__logo-name">Nilkamal Farms</span>
                 <span class="footer__logo-tag">Royal Heritage Mangoes</span>
               </div>
             </div>
@@ -63,7 +63,7 @@ interface TreeData {
 
         <div class="footer__bottom">
           <div class="footer__bottom-inner">
-            <p>&copy; 2026 Nikam Farms. All rights reserved.</p>
+            <p>&copy; 2026 Nilkamal Farms. All rights reserved.</p>
             <p class="footer__craft">Crafted with ♥ and a love for mangoes</p>
           </div>
         </div>

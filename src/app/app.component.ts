@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { LoaderComponent } from './components/loader/loader.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HeroComponent } from './components/hero/hero.component';
@@ -11,6 +12,7 @@ import { FarmToHomeComponent } from './components/farm-to-home/farm-to-home.comp
 import { TestimonialsComponent } from './components/testimonials/testimonials.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { OrderPopupComponent } from './components/order-popup/order-popup.component';
 import { ScrollAnimationService } from './services/scroll-animation.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -19,6 +21,7 @@ import { TranslateService } from '@ngx-translate/core';
   standalone: true,
   imports: [
     CommonModule,
+    HttpClientModule,
     LoaderComponent,
     NavbarComponent,
     HeroComponent,
@@ -30,6 +33,7 @@ import { TranslateService } from '@ngx-translate/core';
     TestimonialsComponent,
     ContactComponent,
     FooterComponent,
+    OrderPopupComponent,
   ],
   template: `
     <app-loader
@@ -54,6 +58,8 @@ import { TranslateService } from '@ngx-translate/core';
 
       <app-footer></app-footer>
     </div>
+
+    <app-order-popup></app-order-popup>
   `,
   styles: [`
     :host { display: block; }

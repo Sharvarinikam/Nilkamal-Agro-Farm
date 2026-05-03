@@ -1,7 +1,7 @@
 {
-  "name": "nikam-farms",
+  "name": "nilkamal-farms",
   "version": "1.0.0",
-  "description": "Premium 3D Mango Brand Website for Nikam Farms",
+  "description": "Premium 3D Mango Brand Website for Nilkamal Farms",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "nikam-farms": {
+    "nilkamal-farms": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -18,7 +18,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/nikam-farms",
+            "outputPath": "dist/nilkamal-farms",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -47,8 +47,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": { "buildTarget": "nikam-farms:build:production" },
-            "development": { "buildTarget": "nikam-farms:build:development" }
+            "production": { "buildTarget": "nilkamal-farms:build:production" },
+            "development": { "buildTarget": "nilkamal-farms:build:development" }
           },
           "defaultConfiguration": "development"
         }

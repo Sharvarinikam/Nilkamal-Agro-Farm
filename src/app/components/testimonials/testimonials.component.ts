@@ -208,7 +208,7 @@ export class TestimonialsComponent implements AfterViewInit {
       location: 'Mumbai, Maharashtra'
     },
     {
-      text: 'I have tasted Alphonso from many farms, but Nikam Farms is in a league of its own. The texture is like custard, the sweetness perfectly balanced. Truly the king of fruits.',
+      text: 'I have tasted Alphonso from many farms, but Nilkamal Farms is in a league of its own. The texture is like custard, the sweetness perfectly balanced. Truly the king of fruits.',
       name: 'Rajesh Kulkarni',
       initials: 'RK',
       location: 'Pune, Maharashtra'
@@ -226,7 +226,7 @@ export class TestimonialsComponent implements AfterViewInit {
       location: 'Thane, Maharashtra'
     },
     {
-      text: 'Three seasons running, we order exclusively from Nikam Farms. The consistency is remarkable. Every single mango is perfect. Our family won\'t accept anything else now.',
+      text: 'Three seasons running, we order exclusively from Nilkamal Farms. The consistency is remarkable. Every single mango is perfect. Our family won\'t accept anything else now.',
       name: 'Deepak Nair',
       initials: 'DN',
       location: 'Thane, Maharashtra'

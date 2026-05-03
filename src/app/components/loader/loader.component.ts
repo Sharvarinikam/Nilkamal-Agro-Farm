@@ -55,7 +55,7 @@ import { gsap } from 'gsap';
 
         <div class="loader__text">
           <div class="loader__brand" #brandText>
-            <span class="loader__brand-nikam">Nikam</span>
+            <span class="loader__brand-nilkamal">Nilkamal</span>
             <span class="loader__brand-farms">Farms</span>
           </div>
           <div class="loader__tagline" #tagline>Royal Heritage Mangoes</div>
@@ -135,7 +135,7 @@ import { gsap } from 'gsap';
         line-height: 1;
       }
 
-      &__brand-nikam {
+      &__brand-nilkamal {
         font-family: 'Playfair Display', serif;
         font-size: clamp(2.5rem, 6vw, 4rem);
         font-weight: 800;

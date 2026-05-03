@@ -24,10 +24,10 @@ const transporter = nodemailer.createTransport({
 // Email endpoint
 app.post('/api/send-order', async (req, res) => {
   try {
-    const { name, phone, city, variety, qty, message } = req.body;
+    const { name, phone, email, city, variety, qty, message } = req.body;
 
     // Validate required fields
-    if (!name || !phone || !city || !variety) {
+    if (!name || !phone || !email || !variety) {
       return res.status(400).json({ 
         success: false, 
         message: 'Please fill in all required fields' 
@@ -37,12 +37,12 @@ app.post('/api/send-order', async (req, res) => {
     // Email to farm owner
     const ownerEmail = {
       from: process.env.EMAIL_USER || 'your-email@gmail.com',
-      to: process.env.OWNER_EMAIL || 'nikamfarms@example.com',
+      to: process.env.OWNER_EMAIL || 'nilkamalfarms@example.com',
       subject: `🥭 New Mango Order - ${name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #C49B32; margin-bottom: 10px;">🥭 Nikam Agro Farms</h1>
+            <h1 style="color: #C49B32; margin-bottom: 10px;">🥭 Nilkamal Agro Farms</h1>
             <h2 style="color: #3B2314;">New Order Received</h2>
           </div>
           
@@ -58,9 +58,15 @@ app.post('/api/send-order', async (req, res) => {
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${phone}</td>
               </tr>
               <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold; color: #3B2314;">Email:</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${email}</td>
+              </tr>
+              ${city ? `
+              <tr>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold; color: #3B2314;">City:</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${city}</td>
               </tr>
+              ` : ''}
             </table>
           </div>
 
@@ -87,7 +93,7 @@ app.post('/api/send-order', async (req, res) => {
           <div style="text-align: center; margin-top: 30px; padding: 20px; background: #2D1810; color: #FDF5E6; border-radius: 8px;">
             <p style="margin: 0; font-size: 14px;">
               📞 Please contact the customer within 24 hours<br>
-              📧 This is an automated notification from Nikam Agro Farms
+              📧 This is an automated notification from Nilkamal Agro Farms
             </p>
           </div>
         </div>
@@ -98,11 +104,11 @@ app.post('/api/send-order', async (req, res) => {
     const customerEmail = {
       from: process.env.EMAIL_USER || 'your-email@gmail.com',
       to: phone.includes('@') ? phone : `${phone}@sms.gmail.com`, // Fallback for demo
-      subject: `Order Confirmation - Nikam Agro Farms`,
+      subject: `Order Confirmation - Nilkamal Agro Farms`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #C49B32; margin-bottom: 10px;">🥭 Nikam Agro Farms</h1>
+            <h1 style="color: #C49B32; margin-bottom: 10px;">🥭 Nilkamal Agro Farms</h1>
             <h2 style="color: #3B2314;">Order Confirmation</h2>
           </div>
           
@@ -134,8 +140,8 @@ app.post('/api/send-order', async (req, res) => {
           <div style="text-align: center; margin-top: 30px; padding: 20px; background: #2D1810; color: #FDF5E6; border-radius: 8px;">
             <p style="margin: 0; font-size: 14px;">
               📞 Phone: +91 98765 43210<br>
-              📧 Email: orders@nikamagrofarms.com<br>
-              📍 Address: Nikam Agro Farms, Village Nate, Taluka Ratnagiri, Maharashtra 415612
+              📧 Email: orders@nilkamagrofarms.com<br>
+              📍 Address: Nilkamal Agro Farms, Village Nate, Taluka Ratnagiri, Maharashtra 415612
             </p>
           </div>
         </div>
@@ -172,6 +178,6 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🥭 Nikam Agro Farms server running on port ${PORT}`);
+  console.log(`🥭 Nilkamal Agro Farms server running on port ${PORT}`);
   console.log(`📧 Email service ready`);
 });

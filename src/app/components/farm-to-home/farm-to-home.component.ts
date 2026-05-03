@@ -164,7 +164,7 @@ import { ScrollAnimationService } from '../../services/scroll-animation.service'
 export class FarmToHomeComponent implements AfterViewInit {
   steps = [
     { icon: '🌅', title: 'Dawn Harvest', desc: 'Our farmers hand-pick only the finest mangoes at first light, when the fruit is coolest and freshest.', time: '5:00 AM' },
-    { icon: '🔍', title: 'Royal Selection', desc: 'Each mango is individually inspected, graded by size, colour, and aroma. Only the top 20% earn the Nikam Farms seal.', time: '7:00 AM' },
+    { icon: '🔍', title: 'Royal Selection', desc: 'Each mango is individually inspected, graded by size, colour, and aroma. Only the top 20% earn the Nilkamal Farms seal.', time: '7:00 AM' },
     { icon: '🧺', title: 'Traditional Wrapping', desc: 'Wrapped lovingly in soft tissue paper and nestled in hay-lined boxes — the way our grandmother used to pack them.', time: '9:00 AM' },
     { icon: '🚛', title: 'Cold Chain Dispatch', desc: 'Temperature-controlled transport from Ratnagiri to major cities. We never break the cold chain.', time: '11:00 AM' },
     { icon: '🏠', title: 'Doorstep Delivery', desc: 'Delivered to your home with a freshness guarantee, a handwritten note from our family, and recipe suggestions.', time: 'Next Day' },

@@ -28,12 +28,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
         <ul class="nav__links" [class.nav__links--open]="menuOpen">
           <li *ngFor="let link of links">
-            <a [href]="'#' + link.id" class="nav__link" (click)="menuOpen = false">
+            <a href="javascript:void(0)" class="nav__link" (click)="scrollToSection(link.id); menuOpen = false">
               {{ 'NAV.' + link.key | translate }}
             </a>
           </li>
           <li>
-            <a href="#contact" class="nav__cta" (click)="menuOpen = false">
+            <a href="javascript:void(0)" class="nav__cta" (click)="scrollToSection('contact'); menuOpen = false">
               {{ 'ORDER_NOW' | translate }}
             </a>
           </li>
@@ -273,6 +273,13 @@ export class NavbarComponent {
     const newLang = this.currentLang === 'en' ? 'mr' : 'en';
     this.currentLang = newLang;
     this.translate.use(newLang);
+  }
+
+  scrollToSection(sectionId: string): void {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   links = [

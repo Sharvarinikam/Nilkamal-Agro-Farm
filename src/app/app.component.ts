@@ -13,7 +13,9 @@ import { TestimonialsComponent } from './components/testimonials/testimonials.co
 import { ContactComponent } from './components/contact/contact.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { OrderPopupComponent } from './components/order-popup/order-popup.component';
+import { ConfirmationPopupComponent } from './components/confirmation-popup/confirmation-popup.component';
 import { ScrollAnimationService } from './services/scroll-animation.service';
+import { ConfirmationService } from './services/confirmation.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -34,6 +36,7 @@ import { TranslateService } from '@ngx-translate/core';
     ContactComponent,
     FooterComponent,
     OrderPopupComponent,
+    ConfirmationPopupComponent,
   ],
   template: `
     <app-loader
@@ -60,6 +63,7 @@ import { TranslateService } from '@ngx-translate/core';
     </div>
 
     <app-order-popup></app-order-popup>
+    <app-confirmation-popup [show]="showConfirmation" (closed)="onConfirmationClosed()"></app-confirmation-popup>
   `,
   styles: [`
     :host { display: block; }
@@ -80,9 +84,11 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AppComponent implements OnInit, OnDestroy {
   isLoading = true;
+  showConfirmation = false;
 
   constructor(
     private scrollService: ScrollAnimationService,
+    private confirmationService: ConfirmationService,
     private translate: TranslateService
   ) {
     this.translate.setDefaultLang('en');
@@ -95,12 +101,25 @@ export class AppComponent implements OnInit, OnDestroy {
   
   ngOnInit(): void {
     document.body.classList.add('loading');
+    
+    // Subscribe to confirmation service
+    this.confirmationService.confirmation$.subscribe(() => {
+      this.showConfirmation = true;
+    });
   }
   
   onLoadingComplete(): void {
     this.isLoading = false;
     document.body.classList.remove('loading');
     setTimeout(() => this.scrollService.refresh(), 100);
+  }
+  
+  showConfirmationPopup(): void {
+    this.showConfirmation = true;
+  }
+
+  onConfirmationClosed(): void {
+    this.showConfirmation = false;
   }
   
   ngOnDestroy(): void {

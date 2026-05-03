@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { ScrollAnimationService } from '../../services/scroll-animation.service';
 import { EmailService, OrderData } from '../../services/email.service';
+import { ConfirmationService } from '../../services/confirmation.service';
 
 @Component({
   selector: 'app-contact',
@@ -81,7 +82,7 @@ import { EmailService, OrderData } from '../../services/email.service';
 export class ContactComponent implements AfterViewInit {
   form = { name: '', phone: '', email: '', city: '', variety: 'mixed', qty: 2, message: '' };
   submitted = false;
-  constructor(private scroll: ScrollAnimationService, private emailService: EmailService) {}
+  constructor(private scroll: ScrollAnimationService, private emailService: EmailService, private confirmationService: ConfirmationService) {}
   ngAfterViewInit(): void { this.scroll.revealElements('.contact .reveal-el'); }
   adjustQty(delta: number): void { this.form.qty = Math.max(1, Math.min(50, this.form.qty + delta)); }
   onSubmit(): void {
@@ -106,9 +107,9 @@ export class ContactComponent implements AfterViewInit {
       next: (response) => {
         this.submitted = false;
         if (response.success) {
-          alert(response.message);
           // Reset form
           this.form = { name: '', phone: '', email: '', city: '', variety: 'mixed', qty: 2, message: '' };
+          this.confirmationService.showConfirmation();
         } else {
           alert('Failed to submit order. Please try again or call us directly.');
         }

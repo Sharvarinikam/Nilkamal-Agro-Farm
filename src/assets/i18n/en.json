@@ -198,5 +198,13 @@
     "MAYBE_LATER": "Maybe Later",
     "EMAIL_PLACEHOLDER": "Enter your email...",
     "EMAIL_LABEL": "Email"
+  },
+
+  "CONFIRMATION": {
+    "TITLE": "Order Received!",
+    "MESSAGE": "Thank you for your order. We've successfully received your request and will process it shortly.",
+    "ORDER_RECEIVED": "Your order details have been sent to us",
+    "CONTACT_SOON": "We will contact you within 24 hours to confirm your order and discuss delivery details.",
+    "CLOSE_BUTTON": "Got it!"
   }
 }

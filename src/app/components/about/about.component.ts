@@ -77,7 +77,7 @@ export class AboutComponent implements AfterViewInit {
   ];
   values = [
     { icon: '🌿', title: 'Chemical-Free Cultivation', desc: 'No pesticides, no shortcuts—only organic methods our ancestors trusted.' },
-   // { icon: '👑', title: 'Royal GI Tagged Alphonso', desc: 'Certified Hapus from the legendary Ratnagiri-Devgad belt.' },
+   // { icon: '👑', title: 'Royal GI Tagged Alphonso', desc: 'Certified Hapus from the legendary Pune-Devgad belt.' },
     { icon: '🤲', title: 'Hand-Picked with Care', desc: 'Every mango is touched by human hands, never machines, from tree to box.' },
   ];
   constructor(private scroll: ScrollAnimationService) {}

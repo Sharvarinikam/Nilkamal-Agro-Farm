@@ -117,7 +117,7 @@ app.post('/api/send-order', async (req, res) => {
     // Confirmation email to customer
     const customerEmail = {
       from: process.env.EMAIL_USER || 'your-email@gmail.com',
-      to: phone.includes('@') ? phone : `${phone}@sms.gmail.com`, // Fallback for demo
+      to: email, // Send to customer's actual email address
       subject: `Order Confirmation - Nilkamal Agro Farms`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd;">
@@ -165,7 +165,7 @@ app.post('/api/send-order', async (req, res) => {
             <p style="margin: 0; font-size: 14px;">
               📞 Phone: +91 98765 43210<br>
               📧 Email: orders@nilkamagrofarms.com<br>
-              📍 Address: Nilkamal Agro Farms, Village Nate, Taluka Ratnagiri, Maharashtra 415612
+              📍 Address: Nilkamal Agro Farms, Village Nate, Taluka Pune, Maharashtra 415612
             </p>
           </div>
         </div>
@@ -176,8 +176,8 @@ app.post('/api/send-order', async (req, res) => {
     await transporter.sendMail(ownerEmail);
     console.log('Order notification sent to farm owner');
 
-    // Only send customer email if they provided an email address
-    if (phone.includes('@')) {
+    // Only send customer email if they provided a valid email address
+    if (email && email.includes('@')) {
       await transporter.sendMail(customerEmail);
       console.log('Confirmation sent to customer');
     }

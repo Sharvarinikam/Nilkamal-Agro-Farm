@@ -119,8 +119,8 @@ import { ScrollAnimationService } from '../../services/scroll-animation.service'
 export class VarietiesComponent implements AfterViewInit {
   varieties = [
     {name:'Kesar',emoji:'🥭',origin:'Junagadh, Gujarat',description:'Named after saffron for its deep orange pulp. Intensely sweet with a hint of citrus and floral notes.',sweetness:90,aroma:85,fibre:15,price:'800',badge:'Premium Choice',email:''},
-    {name:'Alphonso Hapus',emoji:'🥭',origin:'Ratnagiri, Maharashtra',description:'The undisputed King of Mangoes. Rich saffron flesh, zero fibre, intoxicating aroma. ',sweetness:95,aroma:98,fibre:10,price:'1,200',badge:'Limited Stock',email:''},
-    {name:'Devgad Hapus',emoji:'🥭',origin:'Devgad, Maharashtra',description:"Slightly tangier cousin of the Ratnagiri Alphonso. Firmer flesh, excellent for cutting. ",sweetness:88,aroma:92,fibre:12,price:'1,000',badge:'Out of Stock',email:'',outOfStock:true},
+    {name:'Alphonso Hapus',emoji:'🥭',origin:'Pune, Maharashtra',description:'The undisputed King of Mangoes. Rich saffron flesh, zero fibre, intoxicating aroma. ',sweetness:95,aroma:98,fibre:10,price:'1,200',badge:'Limited Stock',email:''},
+    {name:'Devgad Hapus',emoji:'🥭',origin:'Devgad, Maharashtra',description:"Slightly tangier cousin of the Pune Alphonso. Firmer flesh, excellent for cutting. ",sweetness:88,aroma:92,fibre:12,price:'1,000',badge:'Out of Stock',email:'',outOfStock:true},
   ];
   constructor(private scroll: ScrollAnimationService) {}
   ngAfterViewInit(): void { this.scroll.revealElements('.varieties .reveal-el'); this.scroll.staggerReveal('.varieties__showcase', '.varieties__card', 0.2); }

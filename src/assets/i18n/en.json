@@ -13,7 +13,7 @@
   },
 
   "HERO": {
-    "BADGE": "Est. 1952 · Ratnagiri, Maharashtra",
+    "BADGE": "Est. 1952 · Pune, Maharashtra",
     "TITLE_LINE1": "The Royal",
     "TITLE_LINE2": "Heritage",
     "TITLE_LINE3": "of Alphonso",
@@ -29,7 +29,7 @@
   "ABOUT": {
     "TITLE": "Our Legacy",
     "SUBTITLE": "Three generations of mango cultivation excellence",
-    "DESCRIPTION": "Since 1952, Nilkamal Agro Farms has been synonymous with premium quality Kesar mangoes. Our journey began in the fertile lands of Ratnagiri, Maharashtra, where the perfect climate and soil conditions create the world's finest mangoes.",
+    "DESCRIPTION": "Since 1952, Nilkamal Agro Farms has been synonymous with premium quality Kesar mangoes. Our journey began in the fertile lands of Pune, Maharashtra, where the perfect climate and soil conditions create the world's finest mangoes.",
     "HERITAGE": "Our Heritage",
     "MAIN_TITLE": "Three Generations<br>of Mango Royalty",
     "PARA1": "In 1952, our grandfather planted the first Alphonso saplings on the sun-drenched slopes of Pune. He believed that the finest mangoes come not from science alone, but from a deep reverence for the land, the seasons, and the ancient wisdom passed down through generations.",
@@ -92,7 +92,7 @@
     "FORM_TITLE": "Place Your Order",
     "FORM_SUB": "Fill in your details and our team will call you within 24 hours",
     "FARM_ADDRESS": "Farm Address",
-    "FARM_ADDRESS_TEXT": "Nilkamal Agro Farms, Village Nate, Taluka Ratnagiri,<br>District Ratnagiri, Maharashtra 415612",
+    "FARM_ADDRESS_TEXT": "Nilkamal Agro Farms, Village Nate, Taluka Pune,<br>District Pune, Maharashtra 415612",
     "PHONE": "Phone & WhatsApp",
     "EMAIL": "Email",
     "SEASON": "Season",
@@ -105,7 +105,7 @@
     "ADDRESS_PLACEHOLDER": "Enter your complete delivery address",
     "VARIETY_PREF": "Variety Preference",
     "SELECT_VARIETY": "Select variety",
-    "ALPHONSO": "Alphonso Hapus (Ratnagiri)",
+    "ALPHONSO": "Alphonso Hapus (Pune)",
     "KESAR_OPT": "Kesar",
     "DEVGAD": "Devgad Hapus",
     "MIXED": "Mixed Royal Box",
@@ -161,7 +161,7 @@
     "STEP3_DESC": "Wrapped lovingly in soft tissue paper and nestled in hay-lined boxes — the way our grandmother used to pack them.",
     "STEP3_TIME": "9:00 AM",
     "STEP4_TITLE": "Cold Chain Dispatch",
-    "STEP4_DESC": "Temperature-controlled transport from Ratnagiri to Pune (and expanding everywhere). We never break the cold chain.",
+    "STEP4_DESC": "Temperature-controlled transport from Pune to major cities (and expanding everywhere). We never break the cold chain.",
     "STEP4_TIME": "11:00 AM",
     "STEP5_TITLE": "Doorstep Delivery",
     "STEP5_DESC": "Delivered to your home with a freshness guarantee, a handwritten note from our family, and recipe suggestions.",
@@ -200,6 +200,7 @@
     "TITLE": "Order Received!",
     "MESSAGE": "Thank you for your order! We've received it successfully. Since we deliver only the freshest mangoes, dispatch will be scheduled once stock is ready. We'll connect with you via call or email to coordinate everything.",
     "ORDER_RECEIVED": "Your order details have been sent to us",
+    "EMAIL_SENT": "A confirmation email has been sent to your registered email address",
     "CONTACT_SOON": "We will contact you once stock is ready to coordinate delivery.",
     "CLOSE_BUTTON": "Got it!"
   }

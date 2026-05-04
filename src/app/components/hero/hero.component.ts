@@ -34,7 +34,7 @@ import { gsap } from 'gsap';
         </div>
         <div class="hero__mango-info" #mangoInfo>
           <div class="hero__mango-title">Premium Alphonso</div>
-          <div class="hero__mango-subtitle">GI Tagged &bull; Ratnagiri Origin</div>
+          <div class="hero__mango-subtitle">GI Tagged &bull; Pune Origin</div>
         </div>
       </div>
       <div class="hero__content">

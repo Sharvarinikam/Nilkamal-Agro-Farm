@@ -20,6 +20,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
           <p>{{ 'CONFIRMATION.MESSAGE' | translate }}</p>
           <div class="confirmation__details">
             <p><strong>{{ 'CONFIRMATION.ORDER_RECEIVED' | translate }}</strong></p>
+            <p>{{ 'CONFIRMATION.EMAIL_SENT' | translate }}</p>
             <p>{{ 'CONFIRMATION.CONTACT_SOON' | translate }}</p>
           </div>
           <button class="btn-royal confirmation__btn" (click)="close()">

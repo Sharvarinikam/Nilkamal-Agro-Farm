@@ -24,7 +24,7 @@ const transporter = nodemailer.createTransport({
 // Email endpoint
 app.post('/api/send-order', async (req, res) => {
   try {
-    const { name, phone, email, city, variety, qty, message } = req.body;
+    const { name, phone, email, address, variety, qty, message, location, mapLink, mapSnapshot } = req.body;
 
     // Validate required fields
     if (!name || !phone || !email || !variety) {
@@ -61,10 +61,24 @@ app.post('/api/send-order', async (req, res) => {
                 <td style="padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold; color: #3B2314;">Email:</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${email}</td>
               </tr>
-              ${city ? `
+              ${address ? `
               <tr>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold; color: #3B2314;">City:</td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${city}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold; color: #3B2314;">Delivery Address:</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${address}</td>
+              </tr>
+              ` : ''}
+              ${mapSnapshot ? `
+              <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold; color: #3B2314; vertical-align: top;">Location Details:</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd; white-space: pre-line;">${mapSnapshot}</td>
+              </tr>
+              ` : ''}
+              ${mapLink ? `
+              <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold; color: #3B2314;">Map Link:</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">
+                  <a href="${mapLink}" style="color: #C49B32; text-decoration: none; font-weight: bold;" target="_blank">🗺️ View Location on Google Maps</a>
+                </td>
               </tr>
               ` : ''}
             </table>
@@ -130,10 +144,20 @@ app.post('/api/send-order', async (req, res) => {
                 <td style="padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold; color: #3B2314;">Quantity:</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${qty} dozen(s)</td>
               </tr>
+              ${address ? `
               <tr>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold; color: #3B2314;">Delivery City:</td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${city}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold; color: #3B2314;">Delivery Address:</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${address}</td>
               </tr>
+              ` : ''}
+              ${mapLink ? `
+              <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd; font-weight: bold; color: #3B2314;">Map Link:</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">
+                  <a href="${mapLink}" style="color: #C49B32; text-decoration: none; font-weight: bold;" target="_blank">🗺️ View Location on Google Maps</a>
+                </td>
+              </tr>
+              ` : ''}
             </table>
           </div>
 

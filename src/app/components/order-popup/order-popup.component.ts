@@ -5,11 +5,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { EmailService, OrderData } from '../../services/email.service';
 import { ConfirmationService } from '../../services/confirmation.service';
+import { MapModalComponent } from '../map-modal/map-modal.component';
 
 @Component({
   selector: 'app-order-popup',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, TranslateModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, TranslateModule, MapModalComponent],
   template: `
     <div class="order-popup-overlay" [class.active]="isVisible" (click)="closeOnOverlay($event)">
       <div class="order-popup" [class.active]="isVisible">
@@ -62,13 +63,19 @@ import { ConfirmationService } from '../../services/confirmation.service';
               </div>
 
               <div class="order-popup__field">
-                <label>{{ 'POPUP.CITY' | translate }}</label>
-                <input 
-                  type="text" 
-                  [(ngModel)]="form.city" 
-                  name="city" 
-                  placeholder="Mumbai"
-                >
+                <label>{{ 'POPUP.ADDRESS' | translate }}</label>
+                <div class="order-popup__address-group">
+                  <input 
+                    type="text" 
+                    [(ngModel)]="form.address" 
+                    name="address" 
+                    placeholder="Enter your complete delivery address"
+                    class="order-popup__address-input"
+                  >
+                  <button type="button" class="order-popup__map-btn" (click)="openMapModal()">
+                    <span>🗺️</span> Select on Map
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -116,6 +123,12 @@ import { ConfirmationService } from '../../services/confirmation.service';
           </div>
         </form>
       </div>
+
+    <app-map-modal 
+      [visible]="showMapModal" 
+      (closed)="onMapModalClosed()" 
+      (locationSelected)="onLocationSelected($event)">
+    </app-map-modal>
     </div>
   `,
   styles: [`
@@ -309,6 +322,38 @@ import { ConfirmationService } from '../../services/confirmation.service';
       color: rgba(253, 245, 230, 0.3);
     }
 
+    .order-popup__address-group {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .order-popup__address-input {
+      flex: 1;
+    }
+
+    .order-popup__map-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+      background: rgba(196, 155, 50, 0.1);
+      border: 1px solid rgba(196, 155, 50, 0.3);
+      border-radius: 8px;
+      color: #FFD700;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .order-popup__map-btn:hover {
+      background: rgba(196, 155, 50, 0.2);
+      border-color: #C49B32;
+    }
+
     .order-popup__quantity {
       display: flex;
       flex-direction: column;
@@ -413,6 +458,7 @@ import { ConfirmationService } from '../../services/confirmation.service';
 export class OrderPopupComponent implements OnInit, OnDestroy {
   isVisible = false;
   isSubmitting = false;
+  showMapModal = false;
   private timer: any;
   private readonly POPUP_DELAY = 15000; // 15 seconds
 
@@ -420,7 +466,7 @@ export class OrderPopupComponent implements OnInit, OnDestroy {
     name: '',
     phone: '',
     email: '',
-    city: '',
+    address: '',
     variety: 'mixed',
     qty: 2,
     message: ''
@@ -473,7 +519,7 @@ export class OrderPopupComponent implements OnInit, OnDestroy {
       name: this.form.name,
       phone: this.form.phone,
       email: this.form.email,
-      city: this.form.city,
+      address: this.form.address,
       variety: this.form.variety,
       qty: this.form.qty,
       message: this.form.message
@@ -503,10 +549,23 @@ export class OrderPopupComponent implements OnInit, OnDestroy {
       name: '',
       phone: '',
       email: '',
-      city: '',
+      address: '',
       variety: '',
       qty: 2,
       message: ''
     };
+  }
+
+  openMapModal(): void {
+    this.showMapModal = true;
+  }
+
+  onMapModalClosed(): void {
+    this.showMapModal = false;
+  }
+
+  onLocationSelected(location: { coordinates: any; address: any }): void {
+    this.form.address = location.address.formatted || '';
+    this.showMapModal = false;
   }
 }

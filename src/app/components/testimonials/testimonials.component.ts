@@ -215,8 +215,8 @@ export class TestimonialsComponent implements AfterViewInit {
     },
     {
       text: 'We ordered for our daughter\'s wedding. Every guest asked where we got these magnificent mangoes. The presentation, the freshness — absolutely impeccable service.',
-      name: 'Sunita & Anil Joshi',
-      initials: 'SJ',
+      name: 'Sunita Joshi',
+      initials: 'SNJ',
       location: 'Thane, Maharashtra'
     },
     {

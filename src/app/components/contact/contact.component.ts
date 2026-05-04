@@ -6,11 +6,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ScrollAnimationService } from '../../services/scroll-animation.service';
 import { EmailService, OrderData } from '../../services/email.service';
 import { ConfirmationService } from '../../services/confirmation.service';
+import { MapModalComponent } from '../map-modal/map-modal.component';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, TranslateModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, TranslateModule, MapModalComponent],
   template: `
     <section class="contact" id="contact">
       <div class="contact__container">
@@ -33,7 +34,21 @@ import { ConfirmationService } from '../../services/confirmation.service';
               <div class="contact__field"><label>{{ 'CONTACT.FULL_NAME' | translate }} <span class="required">*</span></label><input type="text" placeholder="{{ 'CONTACT.PHONE_PLACEHOLDER' | translate }}" [(ngModel)]="form.name"></div>
               <div class="contact__field"><label>{{ 'CONTACT.PHONE_NUMBER' | translate }} <span class="required">*</span></label><input type="tel" placeholder="{{ 'CONTACT.PHONE_PLACEHOLDER2' | translate }}" [(ngModel)]="form.phone"></div>
               <div class="contact__field"><label>{{ 'CONTACT.EMAIL' | translate }} <span class="required">*</span></label><input type="email" placeholder="your.email@example.com" [(ngModel)]="form.email" required></div>
-              <div class="contact__field"><label>{{ 'CONTACT.CITY' | translate }}</label><input type="text" placeholder="{{ 'CONTACT.CITY_PLACEHOLDER' | translate }}" [(ngModel)]="form.city"></div>
+              <div class="contact__field contact__field--full"><label>{{ 'CONTACT.ADDRESS' | translate }}</label>
+                <div class="contact__address-group">
+                  <input type="text" placeholder="{{ 'CONTACT.ADDRESS_PLACEHOLDER' | translate }}" [(ngModel)]="form.address" class="contact__address-input">
+                  <div class="contact__location-indicator" *ngIf="selectedLocation">
+                    <span class="location-indicator-icon">📍</span>
+                    <span class="location-indicator-text">Location selected</span>
+                    <button type="button" class="location-indicator-remove" (click)="clearLocation()" title="Clear location">×</button>
+                  </div>
+                  <div class="contact__location-buttons">
+                    <button type="button" class="btn-outline contact__location-btn" (click)="openMapModal()">
+                      <span>🗺️</span> Select Location on Map
+                    </button>
+                  </div>
+                </div>
+              </div>
               <div class="contact__field"><label>{{ 'CONTACT.VARIETY_PREF' | translate }} <span class="required">*</span></label>
                 <select [(ngModel)]="form.variety"><option value="">{{ 'CONTACT.SELECT_VARIETY' | translate }}</option><option value="alphonso">{{ 'CONTACT.ALPHONSO' | translate }}</option><option value="kesar">{{ 'CONTACT.KESAR_OPT' | translate }}</option><option value="devgad">{{ 'CONTACT.DEVGAD' | translate }}</option><option value="mixed">{{ 'CONTACT.MIXED' | translate }}</option></select>
               </div>
@@ -46,6 +61,12 @@ import { ConfirmationService } from '../../services/confirmation.service';
           </div>
         </div>
       </div>
+
+    <app-map-modal 
+      [visible]="showMapModal" 
+      (closed)="onMapModalClosed()" 
+      (locationSelected)="onLocationSelected($event)">
+    </app-map-modal>
     </section>
   `,
   styles: [`
@@ -77,14 +98,47 @@ import { ConfirmationService } from '../../services/confirmation.service';
     .contact__qty-val{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#FFD700;min-width:50px;text-align:center}
     .contact__submit{grid-column:1/-1;width:100%;justify-content:center;margin-top:8px}
     .required{color:#ff4444;font-weight:700;margin-left:2px}
+    .contact__address-group{display:flex;flex-direction:column;gap:12px}
+    .contact__address-input{width:100%}
+    .contact__location-buttons{display:flex;gap:8px;flex-wrap:wrap}
+    .contact__location-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;font-size:.8rem;border:1px solid rgba(196,155,50,.3);background:rgba(253,245,230,.05);color:#FDF5E6;cursor:pointer;transition:all .2s ease;border-radius:6px}
+    .contact__location-btn:hover{border-color:#C49B32;background:rgba(196,155,50,.1)}
+    .contact__location-indicator{display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(40,140,80,.1);border:1px solid rgba(40,140,80,.3);border-radius:6px;margin-top:8px}
+    .location-indicator-icon{font-size:0.9rem}
+    .location-indicator-text{font-family:'Jost',sans-serif;font-size:.75rem;color:#40c880;font-weight:500}
+    .location-indicator-remove{margin-left:auto;background:transparent;border:none;color:rgba(253,245,230,.6);font-size:1.1rem;cursor:pointer;padding:2px 4px;border-radius:3px;transition:all .2s}
+    .location-indicator-remove:hover{background:rgba(255,68,68,.2);color:#ff4444}
+    @media(max-width:576px){.contact__location-buttons{flex-direction:column}.contact__location-btn{justify-content:center}}
   `]
 })
 export class ContactComponent implements AfterViewInit {
-  form = { name: '', phone: '', email: '', city: '', variety: 'mixed', qty: 2, message: '' };
+  form = { name: '', phone: '', email: '', address: '', variety: 'mixed', qty: 2, message: '' };
   submitted = false;
+  showMapModal = false;
+  selectedLocation: { coordinates: any; address: any } | null = null;
+  
   constructor(private scroll: ScrollAnimationService, private emailService: EmailService, private confirmationService: ConfirmationService) {}
   ngAfterViewInit(): void { this.scroll.revealElements('.contact .reveal-el'); }
   adjustQty(delta: number): void { this.form.qty = Math.max(1, Math.min(50, this.form.qty + delta)); }
+
+  openMapModal(): void {
+    this.showMapModal = true;
+  }
+
+  onMapModalClosed(): void {
+    this.showMapModal = false;
+  }
+
+  onLocationSelected(location: { coordinates: any; address: any }): void {
+    this.form.address = location.address.formatted || '';
+    this.selectedLocation = location;
+    this.showMapModal = false;
+  }
+
+  clearLocation(): void {
+    this.selectedLocation = null;
+    this.form.address = '';
+  }
   onSubmit(): void {
     if (!this.form.name || !this.form.phone || !this.form.email || !this.form.variety) { 
       alert('Please fill in all required fields'); 
@@ -97,10 +151,11 @@ export class ContactComponent implements AfterViewInit {
       name: this.form.name,
       phone: this.form.phone,
       email: this.form.email,
-      city: this.form.city,
+      address: this.form.address,
       variety: this.form.variety,
       qty: this.form.qty,
-      message: this.form.message
+      message: this.form.message,
+      location: this.selectedLocation || undefined
     };
     
     this.emailService.sendOrder(orderData).subscribe({
@@ -108,7 +163,8 @@ export class ContactComponent implements AfterViewInit {
         this.submitted = false;
         if (response.success) {
           // Reset form
-          this.form = { name: '', phone: '', email: '', city: '', variety: 'mixed', qty: 2, message: '' };
+          this.form = { name: '', phone: '', email: '', address: '', variety: 'mixed', qty: 2, message: '' };
+          this.selectedLocation = null;
           this.confirmationService.showConfirmation();
         } else {
           alert('Failed to submit order. Please try again or call us directly.');

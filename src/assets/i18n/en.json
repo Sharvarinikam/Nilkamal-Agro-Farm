@@ -101,8 +101,8 @@
     "PHONE_PLACEHOLDER": "Your full name",
     "PHONE_NUMBER": "Phone Number",
     "PHONE_PLACEHOLDER2": "+91 XXXXX XXXXX",
-    "CITY": "City",
-    "CITY_PLACEHOLDER": "Delivery city",
+    "ADDRESS": "Full Address",
+    "ADDRESS_PLACEHOLDER": "Enter your complete delivery address",
     "VARIETY_PREF": "Variety Preference",
     "SELECT_VARIETY": "Select variety",
     "ALPHONSO": "Alphonso Hapus (Ratnagiri)",
@@ -136,18 +136,14 @@
     "MAIN_TITLE": "Why Our Mangoes<br>Reign Supreme",
     "ROYAL_PROMISE": "The Nilkamal Farms Royal Promise",
     "ROYAL_PROMISE_DESC": "Every box that leaves our farm carries our family's honour. If any mango doesn't meet your expectations, we replace the entire order — no questions asked.",
-    "FEATURE1_TITLE": "Konkan Terroir",
-    "FEATURE1_DESC": "The unique microclimate of our Ratnagiri orchards — laterite soil, coastal humidity, and Sahyadri mountain winds — creates flavour no other region can replicate.",
+    "FEATURE1_TITLE": "No Chemicals",
+    "FEATURE1_DESC": "We never use pesticides or artificial ripening. Pure, natural cultivation methods our ancestors trusted.",
     "FEATURE2_TITLE": "Naturally Ripened",
-    "FEATURE2_DESC": "We never use carbide or artificial ripening. Each Alphonso ripens naturally on the tree and in traditional hay beds, developing its signature creamy texture.",
-    "FEATURE3_TITLE": "Heritage Genetics",
-    "FEATURE3_DESC": "Our trees descend from saplings selected seventy years ago for exceptional sweetness, aroma, and that unmistakable saffron colour inside.",
-    "FEATURE4_TITLE": "Lab-Tested Purity",
-    "FEATURE4_DESC": "Every batch is certified free of pesticide residue. We share lab reports with every order because transparency is our tradition.",
-    "FEATURE5_TITLE": "Same-Day Dispatch",
-    "FEATURE5_DESC": "Mangoes are harvested at dawn, graded by hand, wrapped in tissue, and dispatched the very same day to preserve peak freshness.",
-    "FEATURE6_TITLE": "Love in Every Box",
-    "FEATURE6_DESC": "We don't just pack mangoes — we include handwritten notes, recipe cards, and our family's story. Because every box is a gift from our home to yours."
+    "FEATURE2_DESC": "Each mango ripens naturally on the tree, developing its signature creamy texture and sweetness.",
+    "FEATURE3_TITLE": "Love in Every Box",
+    "FEATURE3_DESC": "We include handwritten notes, recipe cards, and our family's story. Every box is a gift from our home to yours.",
+    "FEATURE4_TITLE": "Heritage Genetics",
+    "FEATURE4_DESC": "Our trees descend from saplings selected seventy years ago for exceptional sweetness and aroma."
   },
 
   "FARM_TO_HOME": {
@@ -165,7 +161,7 @@
     "STEP3_DESC": "Wrapped lovingly in soft tissue paper and nestled in hay-lined boxes — the way our grandmother used to pack them.",
     "STEP3_TIME": "9:00 AM",
     "STEP4_TITLE": "Cold Chain Dispatch",
-    "STEP4_DESC": "Temperature-controlled transport from Ratnagiri to major cities. We never break the cold chain.",
+    "STEP4_DESC": "Temperature-controlled transport from Ratnagiri to Pune (and expanding everywhere). We never break the cold chain.",
     "STEP4_TIME": "11:00 AM",
     "STEP5_TITLE": "Doorstep Delivery",
     "STEP5_DESC": "Delivered to your home with a freshness guarantee, a handwritten note from our family, and recipe suggestions.",
@@ -181,8 +177,8 @@
     "PHONE_PLACEHOLDER": "+91 XXXXX XXXXX",
     "EMAIL": "Email Address",
     "EMAIL_PLACEHOLDER": "your.email@example.com",
-    "CITY": "City",
-    "CITY_PLACEHOLDER": "Your city",
+    "ADDRESS": "Full Address",
+    "ADDRESS_PLACEHOLDER": "Enter your complete delivery address",
     "VARIETY": "Mango Variety",
     "SELECT_VARIETY": "Select variety",
     "ALPHONSO": "Alphonso Hapus",
@@ -202,9 +198,9 @@
 
   "CONFIRMATION": {
     "TITLE": "Order Received!",
-    "MESSAGE": "Thank you for your order. We've successfully received your request and will process it shortly.",
+    "MESSAGE": "Thank you for your order! We've received it successfully. Since we deliver only the freshest mangoes, dispatch will be scheduled once stock is ready. We'll connect with you via call or email to coordinate everything.",
     "ORDER_RECEIVED": "Your order details have been sent to us",
-    "CONTACT_SOON": "We will contact you within 24 hours to confirm your order and discuss delivery details.",
+    "CONTACT_SOON": "We will contact you once stock is ready to coordinate delivery.",
     "CLOSE_BUTTON": "Got it!"
   }
 }

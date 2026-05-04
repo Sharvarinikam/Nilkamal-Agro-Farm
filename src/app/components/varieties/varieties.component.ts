@@ -18,10 +18,10 @@ import { ScrollAnimationService } from '../../services/scroll-animation.service'
           <div class="ornament reveal-el"><div class="ornament__diamond"></div></div>
         </div>
         <div class="varieties__showcase">
-          <div class="varieties__card" *ngFor="let mango of varieties; let i = index" [class.varieties__card--featured]="i === 0">
+          <div class="varieties__card" *ngFor="let mango of varieties; let i = index" [class.varieties__card--featured]="i === 0" [class.varieties__card--out-of-stock]="mango.outOfStock">
             <div class="varieties__card-visual">
               <div class="varieties__card-emoji">{{ mango.emoji }}</div>
-              <div class="varieties__card-badge" *ngIf="mango.badge">{{ mango.badge }}</div>
+              <div class="varieties__card-badge" *ngIf="mango.badge" [class.varieties__card-badge--out-of-stock]="mango.outOfStock">{{ mango.badge }}</div>
             </div>
             <div class="varieties__card-body">
               <h3>{{ mango.name }}</h3>
@@ -33,11 +33,10 @@ import { ScrollAnimationService } from '../../services/scroll-animation.service'
                 <div class="varieties__card-meta-item"><span class="label">{{ 'VARIETIES.FIBRE' | translate }}</span><div class="varieties__bar"><div class="varieties__bar-fill" [style.width.%]="mango.fibre"></div></div></div>
               </div>
               <div class="varieties__card-price"><span class="varieties__card-from">{{ 'VARIETIES.FROM' | translate }}</span><span class="varieties__card-amount">₹{{ mango.price }}</span><span class="varieties__card-unit">{{ 'VARIETIES.PER_DOZEN' | translate }}</span></div>
-              <div class="varieties__card-email">
-                <input type="email" [placeholder]="'VARIETIES.EMAIL_PLACEHOLDER' | translate" [(ngModel)]="mango.email" class="varieties__email-input" required>
-                <label class="varieties__email-label">{{ 'VARIETIES.EMAIL_LABEL' | translate }} <span class="required">*</span></label>
-              </div>
-              <button class="btn-royal varieties__card-btn" (click)="preOrder(mango)"><span>{{ 'VARIETIES.PRE_ORDER_NOW' | translate }}</span></button>
+                            <button class="btn-royal varieties__card-btn" (click)="preOrder(mango)" [disabled]="mango.outOfStock">
+                <span *ngIf="!mango.outOfStock">{{ 'VARIETIES.PRE_ORDER_NOW' | translate }}</span>
+                <span *ngIf="mango.outOfStock">Out of Stock</span>
+              </button>
             </div>
           </div>
         </div>
@@ -112,13 +111,16 @@ import { ScrollAnimationService } from '../../services/scroll-animation.service'
     @media(max-width:576px){.varieties__email-input{padding:8px 10px;font-size:.8rem}}
     .varieties__email-label{display:block;font-family:'Jost',sans-serif;font-size:.65rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(253,245,230,.6);margin-bottom:6px}
     .required{color:#ff4444;font-weight:700;margin-left:2px}
+    .varieties__card--out-of-stock{opacity:.7;filter:grayscale(.3)}
+    .varieties__card-badge--out-of-stock{background:#ff4444;color:#fff}
+    .varieties__card-btn:disabled{opacity:.5;cursor:not-allowed;background:rgba(196,155,50,.3)}
   `]
 })
 export class VarietiesComponent implements AfterViewInit {
   varieties = [
-    {name:'Alphonso Hapus',emoji:'🥭',origin:'Ratnagiri, Maharashtra',description:'The undisputed King of Mangoes. Rich saffron flesh, zero fibre, intoxicating aroma. Our signature heritage variety.',sweetness:95,aroma:98,fibre:10,price:'1,200',badge:'Crown Jewel',email:''},
-    {name:'Kesar',emoji:'🥭',origin:'Junagadh, Gujarat',description:'Named after saffron for its deep orange pulp. Intensely sweet with a hint of citrus and floral notes.',sweetness:90,aroma:85,fibre:15,price:'800',badge:null,email:''},
-    {name:'Devgad Hapus',emoji:'🥭',origin:'Devgad, Maharashtra',description:"Slightly tangier cousin of the Ratnagiri Alphonso. Firmer flesh, excellent for cutting. A connoisseur's choice.",sweetness:88,aroma:92,fibre:12,price:'1,000',badge:'Limited',email:''},
+    {name:'Kesar',emoji:'🥭',origin:'Junagadh, Gujarat',description:'Named after saffron for its deep orange pulp. Intensely sweet with a hint of citrus and floral notes.',sweetness:90,aroma:85,fibre:15,price:'800',badge:'Premium Choice',email:''},
+    {name:'Alphonso Hapus',emoji:'🥭',origin:'Ratnagiri, Maharashtra',description:'The undisputed King of Mangoes. Rich saffron flesh, zero fibre, intoxicating aroma. ',sweetness:95,aroma:98,fibre:10,price:'1,200',badge:'Limited Stock',email:''},
+    {name:'Devgad Hapus',emoji:'🥭',origin:'Devgad, Maharashtra',description:"Slightly tangier cousin of the Ratnagiri Alphonso. Firmer flesh, excellent for cutting. ",sweetness:88,aroma:92,fibre:12,price:'1,000',badge:'Out of Stock',email:'',outOfStock:true},
   ];
   constructor(private scroll: ScrollAnimationService) {}
   ngAfterViewInit(): void { this.scroll.revealElements('.varieties .reveal-el'); this.scroll.staggerReveal('.varieties__showcase', '.varieties__card', 0.2); }

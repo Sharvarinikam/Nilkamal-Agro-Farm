@@ -6,10 +6,11 @@ export interface OrderData {
   name: string;
   phone: string;
   email: string;
-  city?: string;
+  address?: string;
   variety: string;
   qty: number;
   message?: string;
+  location?: { coordinates: any; address: any };
 }
 
 export interface EmailResponse {
@@ -26,6 +27,29 @@ export class EmailService {
   constructor(private http: HttpClient) {}
 
   sendOrder(orderData: OrderData): Observable<EmailResponse> {
-    return this.http.post<EmailResponse>(`${this.apiUrl}/send-order`, orderData);
+    // Add map link and snapshot to order data
+    const enrichedData = {
+      ...orderData,
+      mapLink: this.generateMapLink(orderData.location),
+      mapSnapshot: this.generateMapSnapshot(orderData.location)
+    };
+    
+    return this.http.post<EmailResponse>(`${this.apiUrl}/send-order`, enrichedData);
+  }
+
+  private generateMapLink(location?: { coordinates: any; address: any }): string {
+    if (!location || !location.coordinates) return '';
+    
+    const { lat, lng } = location.coordinates;
+    return `https://www.google.com/maps?q=${lat},${lng}&z=16`;
+  }
+
+  private generateMapSnapshot(location?: { coordinates: any; address: any }): string {
+    if (!location || !location.coordinates) return '';
+    
+    const { lat, lng } = location.coordinates;
+    const address = location.address?.formatted || 'Selected Location';
+    
+    return `📍 ${address}\n🗺️ View on map: https://www.google.com/maps?q=${lat},${lng}&z=16\n📊 Coordinates: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
   }
 }

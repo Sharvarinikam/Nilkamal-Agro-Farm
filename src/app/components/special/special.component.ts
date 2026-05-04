@@ -162,12 +162,10 @@ import { ScrollAnimationService } from '../../services/scroll-animation.service'
 })
 export class SpecialComponent implements AfterViewInit {
   features = [
-    { icon: '🏔️', title: 'Konkan Terroir', desc: 'The unique microclimate of our Ratnagiri orchards — laterite soil, coastal humidity, and Sahyadri mountain winds — creates flavour no other region can replicate.' },
-    { icon: '☀️', title: 'Naturally Ripened', desc: 'We never use carbide or artificial ripening. Each Alphonso ripens naturally on the tree and in traditional hay beds, developing its signature creamy texture.' },
-    { icon: '🧬', title: 'Heritage Genetics', desc: 'Our trees descend from saplings selected seventy years ago for exceptional sweetness, aroma, and that unmistakable saffron colour inside.' },
-    { icon: '🧪', title: 'Lab-Tested Purity', desc: 'Every batch is certified free of pesticide residue. We share lab reports with every order because transparency is our tradition.' },
-    { icon: '📦', title: 'Same-Day Dispatch', desc: 'Mangoes are harvested at dawn, graded by hand, wrapped in tissue, and dispatched the very same day to preserve peak freshness.' },
-    { icon: '💛', title: 'Love in Every Box', desc: 'We don\'t just pack mangoes — we include handwritten notes, recipe cards, and our family\'s story. Because every box is a gift from our home to yours.' },
+    { icon: '🚫', title: 'No Chemicals', desc: 'We never use pesticides or artificial ripening. Pure, natural cultivation methods our ancestors trusted.' },
+    { icon: '☀️', title: 'Naturally Ripened', desc: 'Each mango ripens naturally on the tree, developing its signature creamy texture and sweetness.' },
+    { icon: '💛', title: 'Love in Every Box', desc: 'We include handwritten notes, recipe cards, and our family\'s story. Every box is a gift from our home to yours.' },
+    { icon: '🧬', title: 'Heritage Genetics', desc: 'Our trees descend from saplings selected seventy years ago for exceptional sweetness and aroma.' },
   ];
 
   constructor(private scroll: ScrollAnimationService) {}

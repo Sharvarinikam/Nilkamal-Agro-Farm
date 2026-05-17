@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:4200', 'https://nilkamalagrofarms.netlify.app/']
+  origin: ['http://localhost:4200', 'https://nilkamalagrofarms.netlify.app']
 }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'dist/nilkamal-farms/browser')));

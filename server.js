@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
-const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -12,7 +11,6 @@ app.use(cors({
   origin: ['http://localhost:4200', 'https://nilkamalagrofarms.netlify.app']
 }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'dist/nilkamal-farms/browser')));
 
 // Email configuration
 const transporter = nodemailer.createTransport({
@@ -198,10 +196,6 @@ app.post('/api/send-order', async (req, res) => {
   }
 });
 
-// Serve Angular app
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist/nilkamal-farms/browser', 'index.html'));
-});
 
 app.listen(PORT, () => {
   console.log(`🥭 Nilkamal Agro Farms server running on port ${PORT}`);

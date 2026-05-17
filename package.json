@@ -4,13 +4,12 @@
   "description": "Premium 3D Mango Brand Website for Nilkamal Farms",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "server": "node server.js",
     "dev": "concurrently \"npm run server\" \"npm run start\"",
-    "build-and-serve": "npm run build && npm run server"
-  },
+    "start": "npm run build-and-serve",
+    "build-and-serve": "ng build && node server.js"  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^17.3.0",

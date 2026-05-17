@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'dist/nilkamal-farms/browser')));
 
 // Email configuration
 const transporter = nodemailer.createTransport({
@@ -198,7 +198,7 @@ app.post('/api/send-order', async (req, res) => {
 
 // Serve Angular app
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    res.sendFile(path.join(__dirname, 'dist/nilkamal-farms/browser', 'index.html'));
 });
 
 app.listen(PORT, () => {
